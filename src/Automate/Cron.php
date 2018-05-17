@@ -23,7 +23,7 @@ class Cron {
 
     // logging function
     public function log(string $logPath, string $message) {
-        $this->log->pushHandler(new \Monolog\Handler\StreamHandler($logPath, Logger::INFO));
+        $this->log->pushHandler(new \Monolog\Handler\StreamHandler($logPath, \Monolog\Logger::INFO));
         $this->log->info($message);
     }
 
