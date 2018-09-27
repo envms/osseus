@@ -22,27 +22,50 @@ class Debug {
      */
     public static function ks() {
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2)[1];
-        exit("<b style='font-family:Consolas,monospace;color:#c03;'>Application terminated ({$backtrace['file']} - Line {$backtrace['line']})</b>");
+        exit("<b style='font-family:Consolas,monospace;color:#c04;'>Application terminated ({$backtrace['file']} - Line {$backtrace['line']})</b>");
     }
 
     /**
      * Prints variable contents
      *
-     * @param mixed $var - variable to print
+     * @param mixed  $var - variable to print
+     * @param string $title
+     * @param string $titleColor
      */
-    public static function p($var) {
-        $ret = self::determineOutput($var);
-        echo self::PRE[0] . $ret . self::PRE[1] . self::LINEBREAK . self::LINEBREAK;
+    public static function p($var, $title = '', $titleColor = '#c22') {
+        $var = self::determineOutput($var);
+        echo self::PRE[0];
+
+        if ($title !== '') {
+            echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
+        }
+
+        echo $var
+            . self::PRE[1]
+            . self::LINEBREAK
+            . self::LINEBREAK;
     }
 
     /**
      * Prints variable contents and kills script
      *
      * @param $var - variable to print
+     * @param string $title
+     * @param string $titleColor
      */
-    public static function pd($var) {
-        $ret = self::determineOutput($var);
-        echo self::PRE[0] . $ret . self::PRE[1] . self::LINEBREAK . self::LINEBREAK;
+    public static function pd($var, $title = '', $titleColor = '#c22') {
+        $var = self::determineOutput($var);
+        echo self::PRE[0];
+
+        if ($title !== '') {
+            echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
+        }
+
+        echo $var
+            . self::PRE[1]
+            . self::LINEBREAK
+            . self::LINEBREAK;
+
         self::ks();
     }
 
@@ -50,24 +73,41 @@ class Debug {
      * var_dumps() variable contents
      *
      * @param $var - variable to print
+     * @param string $title
+     * @param string $titleColor
      */
-    public static function vd($var) {
+    public static function vd($var, $title = '', $titleColor = '#c22') {
         echo self::PRE[0];
+
+        if ($title !== '') {
+            echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
+        }
+
         var_dump($var);
-        echo self::PRE[1];
-        echo self::LINEBREAK . self::LINEBREAK;
+        echo  self::PRE[1]
+            . self::LINEBREAK
+            . self::LINEBREAK;
     }
 
     /**
      * var_dumps() variable contents and kills script
      *
      * @param $var - variable to print
+     * @param string $title
+     * @param string $titleColor
      */
-    public static function vdd($var) {
+    public static function vdd($var, $title = '', $titleColor = '#c22') {
         echo self::PRE[0];
+
+        if ($title !== '') {
+            echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
+        }
+
         var_dump($var);
-        echo self::PRE[1];
-        echo self::LINEBREAK . self::LINEBREAK;
+        echo  self::PRE[1]
+            . self::LINEBREAK
+            . self::LINEBREAK;
+
         self::ks();
     }
 
