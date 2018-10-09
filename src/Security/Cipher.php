@@ -62,7 +62,10 @@ class Cipher {
      * @return mixed|string
      */
     public function encipher($text) {
-        $cipher = mcrypt_encrypt(self::CIPHER, self::SECRET, $text, self::MODE, self::$iv);
+
+        $cipher = sodium_crypto_secretbox($text,self::$nonce,self::key);
+
+        sodium_memzero($text);
 
         return $this->encode($cipher);
     }
