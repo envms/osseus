@@ -91,31 +91,6 @@ class Cipher {
     }
 
     /**
-     * @param $text
-     *
-     * @return mixed|string
-     *
-     * @note Use only when use of an initialization vector is not possible
-     */
-    public function ecbEncipher($text) {
-        $cipher = mcrypt_encrypt(self::CIPHER, self::SECRET, $text, MCRYPT_MODE_ECB);
-
-        return $this->encode($cipher);
-    }
-
-    /**
-     * @param $cipher
-     *
-     * @return string
-     */
-    public function ecbDecipher($cipher) {
-        $cipher = $this->decode($cipher);
-        $text   = mcrypt_decrypt(self::CIPHER, self::SECRET, $cipher, MCRYPT_MODE_ECB);
-
-        return rtrim($text, "\0");
-    }
-
-    /**
      * @param  mixed $iv
      *
      * @return string $iv
