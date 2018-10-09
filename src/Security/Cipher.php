@@ -102,4 +102,18 @@ class Cipher {
         return self::$iv;
     }
 
+    /**
+     * @param  mixed $nonce
+     *
+     * @return string $nonce
+     *
+     * @throws \Exception
+     */
+    public static function setNonce($nonce = false) {
+
+        self::$nonce = ($nonce === false) ? random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES) : $nonce;
+
+        return self::$nonce;
+    }
+
 }
