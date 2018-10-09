@@ -5,18 +5,13 @@ namespace Envms\Osseus\Security;
 /**
  * Class Cipher
  *
- * @todo Refactor to use OpenSSL instead of now-deprecated Mcrypt
  */
 class Cipher {
-
-    /** @const CIPHER int */
-    const CIPHER = MCRYPT_RIJNDAEL_256;
-    /** @const MODE int */
-    const MODE = MCRYPT_MODE_CBC;
 
     // TODO figure out a way of not making this static, and using dependency injection instead
     /** @var string - stored in Session() after initialization | must be identical across all Cipher instances */
     private static $iv;
+    private static $nonce;
 
     /**
      * Cipher constructor.
