@@ -76,10 +76,18 @@ class Cipher {
      * @return string
      */
     public function decipher($cipher) {
-        $cipher = $this->decode($cipher);
-        $text   = mcrypt_decrypt(self::CIPHER, self::SECRET, $cipher, self::MODE, self::$iv);
 
-        return rtrim($text, "\0");
+        $cipher       = $this->decode($cipher);
+        $ciphertext   = mb_substr($cipher,SODIUM_CRYPTO_SECRETBOX_NONCEBYTES,null,'8bit');
+        $plaintext    = sodium_crypto_secretbox_open(
+            $ciphertext,
+            self::$nonce,
+            self::key
+        );
+
+        sodium_memzero($ciphertext);
+
+        return rtrim($plaintext, "\0");
     }
 
     /**
