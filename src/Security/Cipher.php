@@ -96,8 +96,8 @@ class Cipher {
      * @return string $iv
      */
     public static function setIv($iv = false) {
-        $size     = mcrypt_get_iv_size(self::CIPHER, self::MODE);
-        self::$iv = ($iv === false) ? mcrypt_create_iv($size) : $iv;
+        $size     = openssl_cipher_iv_length(self::CIPHER);
+        self::$iv = ($iv === false) ? openssl_random_pseudo_bytes($size) : $iv;
 
         return self::$iv;
     }
