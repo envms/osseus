@@ -77,7 +77,7 @@ class Session extends \SessionHandler {
     public function read($id) {
         $cipher = new Cipher();
 
-        return $cipher->ecbDecipher(parent::read($id));
+        return $cipher->Decipher(parent::read($id));
     }
 
     /**
@@ -92,7 +92,7 @@ class Session extends \SessionHandler {
     public function write($id, $data) {
         $cipher = new Cipher();
 
-        return parent::write($id, $cipher->ecbEncipher($data));
+        return parent::write($id, $cipher->Encipher($data));
     }
 
     /**
