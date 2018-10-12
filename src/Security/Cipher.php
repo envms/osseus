@@ -8,21 +8,21 @@ namespace Envms\Osseus\Security;
  */
 class Cipher
 {
-
-    /** @var $nonce - stored in Session() after initialization | must be identical across all Cipher instances */
+    /** @var $nonce - should be stored in session data */
     private $nonce;
 
-    /** @var string $secret */
-    private $secret;
+    /** @var string $key */
+    private $key;
 
     /**
      * Cipher constructor.
      *
-     * @param $secret - this should only ever be set within env.json and NEVER publicly shared
+     * @param $key - this should ideally be set within env.json and NEVER publicly shared. If
+     *               env.json is not being used, the key can be passed manually
      */
-    public function __construct(string $secret)
+    public function __construct(string $key)
     {
-        $this->secret = $secret;
+        $this->key = $key;
     }
 
     /**
@@ -60,7 +60,7 @@ class Cipher
     }
 
     /**
-     * The preferred method to encrypt data. Uses the static initialization vector passed into or generated from setIv()
+     * The preferred method to encrypt data. Securely erases the data passed to sodium after encryption
      *
      * @param $text
      *
@@ -68,7 +68,7 @@ class Cipher
      */
     public function encipher($text)
     {
-        $cipher = sodium_crypto_secretbox($text, $this->nonce, $this->secret);
+        $cipher = sodium_crypto_secretbox($text, $this->nonce, $this->key);
 
         sodium_memzero($text);
 
@@ -82,13 +82,12 @@ class Cipher
      */
     public function decipher($cipher)
     {
-
         $cipher = $this->decode($cipher);
-        $cipherText = mb_substr($cipher, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES, null);
+        $cipherText = mb_substr($cipher, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
         $plaintext = sodium_crypto_secretbox_open(
             $cipherText,
             $this->nonce,
-            $this->secret
+            $this->key
         );
 
         sodium_memzero($cipherText);
