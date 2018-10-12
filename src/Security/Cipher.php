@@ -32,7 +32,8 @@ class Cipher
      *
      * @return mixed|string
      */
-    public function encode($string) {
+    public function encode($string)
+    {
         $data = base64_encode($string);
         $data = str_replace(['+', '/', '='], ['-', '_', ''], $data);
 
@@ -46,7 +47,8 @@ class Cipher
      *
      * @return string
      */
-    public function decode($string) {
+    public function decode($string)
+    {
         $data = str_replace(['-', '_'], ['+', '/'], $string);
         $mod4 = strlen($data) % 4;
 
@@ -64,9 +66,9 @@ class Cipher
      *
      * @return mixed|string
      */
-    public function encipher($text) {
-
-        $cipher = sodium_crypto_secretbox($text,self::$nonce,self::key);
+    public function encipher($text)
+    {
+        $cipher = sodium_crypto_secretbox($text, $this->nonce, $this->secret);
 
         sodium_memzero($text);
 
@@ -78,45 +80,34 @@ class Cipher
      *
      * @return string
      */
-    public function decipher($cipher) {
+    public function decipher($cipher)
+    {
 
-        $cipher       = $this->decode($cipher);
-        $ciphertext   = mb_substr($cipher,SODIUM_CRYPTO_SECRETBOX_NONCEBYTES,null,'8bit');
-        $plaintext    = sodium_crypto_secretbox_open(
-            $ciphertext,
-            self::$nonce,
-            self::key
+        $cipher = $this->decode($cipher);
+        $cipherText = mb_substr($cipher, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES, null);
+        $plaintext = sodium_crypto_secretbox_open(
+            $cipherText,
+            $this->nonce,
+            $this->secret
         );
 
-        sodium_memzero($ciphertext);
+        sodium_memzero($cipherText);
 
         return rtrim($plaintext, "\0");
     }
 
     /**
-     * @param  mixed $iv
-     *
-     * @return string $iv
-     */
-    public static function setIv($iv = false) {
-        $size     = openssl_cipher_iv_length(self::CIPHER);
-        self::$iv = ($iv === false) ? openssl_random_pseudo_bytes($size) : $iv;
-
-        return self::$iv;
-    }
-
-    /**
-     * @param  mixed $nonce
-     *
-     * @return string $nonce
+     * @param $nonce
      *
      * @throws \Exception
+     *
+     * @return string $nonce
      */
-    public static function setNonce($nonce = false) {
+    public function setNonce($nonce = false)
+    {
+        $this->nonce = ($nonce === false) ? random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES) : $nonce;
 
-        self::$nonce = ($nonce === false) ? random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES) : $nonce;
-
-        return self::$nonce;
+        return $this->nonce;
     }
 
 }
