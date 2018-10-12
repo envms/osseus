@@ -11,11 +11,16 @@ use Envms\Osseus\Security\Sanitize;
  *
  * @todo Inject class dependencies
  */
-class Cookie {
+class Cookie
+{
 
+    /** @var string */
     protected $path;
+    /** @var string */
     protected $domain;
+    /** @var bool */
     protected $secure;
+    /** @var bool */
     protected $httponly;
 
     /**
@@ -24,10 +29,11 @@ class Cookie {
      * @param bool   $secure   - Leave this on unless the domain does not implement site-wide https
      * @param bool   $httponly - Should always be on unless a specific cookie needs to be accessible by the client
      */
-    public function __construct($domain = '', $path = '/', $secure = true, $httponly = true) {
-        $this->path     = $path;
-        $this->domain   = $domain;
-        $this->secure   = $secure;
+    public function __construct($domain = '', $path = '/', $secure = true, $httponly = true)
+    {
+        $this->path = $path;
+        $this->domain = $domain;
+        $this->secure = $secure;
         $this->httponly = $httponly;
     }
 
@@ -37,13 +43,15 @@ class Cookie {
      * @param string $name
      * @param mixed  $value
      * @param int    $expire - Defaults to 3 months (60 x 60 x 24 x 30 x 3)
+     *
      * @return bool
      */
 
-    public function assign(string $name, $value, int $expire = 7776000) {
+    public function assign(string $name, $value, int $expire = 7776000)
+    {
         $sanitize = new Sanitize($name);
-        $name     = $sanitize->word()->getSanitized();
-        $value    = $sanitize->reset($value)->html()->getSanitized();
+        $name = $sanitize->word()->getSanitized();
+        $value = $sanitize->reset($value)->html()->getSanitized();
 
         return setcookie($name, $value, $expire, $this->path, $this->domain, $this->secure, $this->httponly);
     }
@@ -54,12 +62,14 @@ class Cookie {
      * @param string $name
      * @param mixed  $value
      * @param int    $expire
+     *
      * @return bool
      */
 
-    public function rawAssign(string $name, $value, int $expire = 7776000) {
+    public function rawAssign(string $name, $value, int $expire = 7776000)
+    {
         $sanitize = new Sanitize($name);
-        $name     = $sanitize->word()->getSanitized();
+        $name = $sanitize->word()->getSanitized();
 
         return setrawcookie($name, $value, $expire, $this->path, $this->domain, $this->secure, $this->httponly);
     }
@@ -69,19 +79,23 @@ class Cookie {
      *
      * @param string $name
      * @param mixed  $value
+     *
      * @return bool
      */
 
-    public function permanentAssign($name, $value) {
+    public function permanentAssign($name, $value)
+    {
         return $this->assign($name, $value, 157680000);
     }
 
     /**
      * @param $name
+     *
      * @return mixed
      */
 
-    public function get($name) {
+    public function get($name)
+    {
         $sanitize = new Sanitize($name);
 
         return $_COOKIE[$sanitize->word()->getSanitized()];

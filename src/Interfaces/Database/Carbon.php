@@ -10,7 +10,8 @@ namespace Envms\Osseus\Interfaces\Database;
  *
  * @todo Refactor interface to include methods offset, limit, order and group, and not manage with all() method
  */
-interface Carbon {
+interface Carbon
+{
 
     /**
      * @param int    $offset

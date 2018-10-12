@@ -9,14 +9,17 @@ namespace Envms\Osseus\I18n;
  *
  * @todo Implement SplFixedArray to improve performance and memory usage
  */
-class I18n {
+class I18n
+{
 
     protected $phrases = [];
     /** @var array  - Static sentences and phrases */
     protected $complex = [];
+
     /** @var array  - Complex and variable sentences which require parsing */
 
-    public function __construct() {
+    public function __construct()
+    {
 
     }
 
@@ -26,7 +29,8 @@ class I18n {
      *
      * @return bool
      */
-    public function add(array $data, $preserve = false) {
+    public function add(array $data, $preserve = false)
+    {
         if (!is_array($data['phrases']) || !is_array($data['complex'])) {
             return false;
         }
@@ -42,7 +46,8 @@ class I18n {
      *
      * @return null|string
      */
-    public function __get(string $key) {
+    public function __get(string $key)
+    {
         return (isset($this->phrases[$key])) ? $this->phrases[$key] : null;
     }
 
@@ -52,7 +57,8 @@ class I18n {
      *
      * @return null|string
      */
-    public function get(string $key, ...$inserts) {
+    public function get(string $key, ...$inserts)
+    {
         if (!array_key_exists($key, $this->complex)) {
             return null;
         }

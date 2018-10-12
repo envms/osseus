@@ -9,7 +9,8 @@ use Envms\Osseus\Interfaces\Model\Model as ModelInterface;
  *
  * A standard model structure for data storage
  */
-class Model implements ModelInterface {
+class Model implements ModelInterface
+{
 
     /** @var int */
     public $id = null;
@@ -18,9 +19,11 @@ class Model implements ModelInterface {
 
     /**
      * Model()
+     *
      * @param array $data
      */
-    public function __construct(array $data) {
+    public function __construct(array $data)
+    {
         if (isset($data['id'])) {
             $this->id = (int)$data['id']; // typecasting here prevents "valid" string integers like 012, converting it to 12 instead
             unset($data['id']);
@@ -30,35 +33,44 @@ class Model implements ModelInterface {
 
     /**
      * __isset() - Magic Method
+     *
      * @param  string $key
+     *
      * @return bool
      */
-    public function __isset(string $key) {
+    public function __isset(string $key)
+    {
         return isset($this->data[$key]);
     }
 
     /**
      * __set() - Magic Method
+     *
      * @param  string $key
-     * @param  mixed $value
+     * @param  mixed  $value
      */
-    public function __set(string $key, $value) {
+    public function __set(string $key, $value)
+    {
         $this->data[$key] = $value;
     }
 
     /**
      * __unset() - Magic Method
+     *
      * @param  string $key
      */
-    public function __unset(string $key) {
+    public function __unset(string $key)
+    {
         unset($this->data[$key]);
     }
 
     /**
      * @param string $key
+     *
      * @return mixed
      */
-    public function __get(string $key) {
+    public function __get(string $key)
+    {
         return isset($this->data[$key]) ? $this->data[$key] : false;
     }
 

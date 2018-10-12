@@ -9,7 +9,8 @@ use Envms\Osseus\Dev\Debug;
  *
  * @description
  */
-abstract class Exception extends \Exception {
+abstract class Exception extends \Exception
+{
     /** @var string */
     private $string;
     /** @var string */
@@ -25,7 +26,8 @@ abstract class Exception extends \Exception {
      * @param int        $code
      * @param \Exception $previous
      */
-    public function __construct(string $message = null, int $code = 0, \Exception $previous = null) {
+    public function __construct(string $message = null, int $code = 0, \Exception $previous = null)
+    {
         if ($message === null) {
             throw new $this(get_class($this));
         }
@@ -35,7 +37,8 @@ abstract class Exception extends \Exception {
     /**
      * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
         return get_class($this) . ": {$this->message} ({$this->code}) in {$this->file} line {$this->line}" . Debug::LINEBREAK . "{$this->getTraceAsString()}";
     }
 

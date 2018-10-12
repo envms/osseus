@@ -9,7 +9,8 @@ use Envms\Osseus\Interfaces\Database\Carbon as CarbonInterface;
  *
  * @todo Refactor class to include methods offset, limit, order and group, and not manage with all() method
  */
-class Carbon implements CarbonInterface {
+class Carbon implements CarbonInterface
+{
 
     /** @var string - Matches the database module name which precedes $divider */
     protected $module = null;
@@ -25,7 +26,8 @@ class Carbon implements CarbonInterface {
     /**
      * @param \PDO $pdo
      */
-    public function __construct(\PDO $pdo) {
+    public function __construct(\PDO $pdo)
+    {
         $this->source = $this->module . $this->divider . $this->table;
 
         $this->pdo = $pdo;
@@ -39,7 +41,8 @@ class Carbon implements CarbonInterface {
      *
      * @return array
      */
-    public function all(int $offset = 0, int $limit = 50, string $order = 'id ASC', string $group = '') {
+    public function all(int $offset = 0, int $limit = 50, string $order = 'id ASC', string $group = '')
+    {
         return [];
     }
 

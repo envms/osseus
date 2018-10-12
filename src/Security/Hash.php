@@ -9,12 +9,13 @@ use Envms\Osseus\Utils\Regex;
  *
  *
  */
-class Hash {
+class Hash
+{
 
-    const MD5       = 'md5';
-    const SHA1      = 'sha1';
-    const SHA256    = 'sha256';
-    const SHA512    = 'sha512';
+    const MD5 = 'md5';
+    const SHA1 = 'sha1';
+    const SHA256 = 'sha256';
+    const SHA512 = 'sha512';
     const WHIRLPOOL = 'whirlpool';
 
     /** @var string $secret */
@@ -26,7 +27,8 @@ class Hash {
      * @param string $secret - Normally supplied by env.json file
      * @param Regex  $regex
      */
-    public function __construct(string $secret, Regex $regex) {
+    public function __construct(string $secret, Regex $regex)
+    {
         $this->secret = $secret;
         $this->regex = $regex;
     }
@@ -37,7 +39,8 @@ class Hash {
      *
      * @return string
      */
-    public function data($data, $algorithm = self::SHA256) {
+    public function data($data, $algorithm = self::SHA256)
+    {
         return hash($algorithm, $this->secret . $data);
     }
 
@@ -50,7 +53,8 @@ class Hash {
      *
      * @return string
      */
-    public function password(string $password, string $salt = '', string $algorithm = self::SHA512) {
+    public function password(string $password, string $salt = '', string $algorithm = self::SHA512)
+    {
         // split the password into three equal-sized chunks
         $splitPassword = $this->regex->split($password, Regex::SPLIT_SECTIONS, 3);
         // apply the secret and salt to make the password just a little more secure

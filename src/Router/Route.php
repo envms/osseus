@@ -11,7 +11,8 @@ use Envms\Osseus\Exception\NotFound;
  *
  *
  */
-class Route implements RouteInterface {
+class Route implements RouteInterface
+{
 
     /** @var array - Holds each controller instance */
     protected $instance = [];
@@ -19,7 +20,8 @@ class Route implements RouteInterface {
     /**
      * Route constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
 
     }
 
@@ -34,9 +36,10 @@ class Route implements RouteInterface {
      *
      * @todo Implement options functionality
      */
-    public function go(Uri $uri, string $applicationName, bool $isApi) {
-        $action  = 'index';
-        $params  = [];
+    public function go(Uri $uri, string $applicationName, bool $isApi)
+    {
+        $action = 'index';
+        $params = [];
         $options = null;
 
         if ($isApi === true) {
@@ -47,24 +50,22 @@ class Route implements RouteInterface {
             }
 
             return $this->trigger($controller, $action, $uri->getParams(), $uri->getOptions());
-        }
-        else {
+        } else {
             $controller = $applicationName . '\\' . $uri->getController() . '\Controller';
-            $action     = $uri->getAction();
+            $action = $uri->getAction();
 
             if (!empty($url[2])) {
-                $key   = '';
+                $key = '';
                 $isKey = true;
 
                 // iterate through each parameter given to assign key value pairs
                 foreach ($url as $u) {
                     if ($isKey) {
-                        $key   = $u;
+                        $key = $u;
                         $isKey = false;
-                    }
-                    else {
+                    } else {
                         $params[$key] = $u;
-                        $isKey        = true;
+                        $isKey = true;
                     }
                 }
             }
@@ -87,7 +88,8 @@ class Route implements RouteInterface {
      * @return mixed
      */
 
-    public function trigger(string $controller, string $action, array $params, $options) {
+    public function trigger(string $controller, string $action, array $params, $options)
+    {
         // check if the requested controller has been already instantiated
         if (!isset($this->instance[$controller])) {
             // if not, try to instantiate the controller

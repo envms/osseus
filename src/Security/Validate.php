@@ -11,7 +11,8 @@ use Envms\Osseus\Utils\Regex;
  * the necessary methods within the Validate class. This class differs from Sanitize by only
  * providing errors to what is invalid, and not automatically cleaning dirty data.
  */
-class Validate {
+class Validate
+{
 
     /** @var array */
     protected $errors = [];
@@ -23,8 +24,9 @@ class Validate {
     /**
      * @param $data
      */
-    public function __construct($data) {
-        $this->data  = $data;
+    public function __construct($data)
+    {
+        $this->data = $data;
         $this->regex = new Regex($this->data);
     }
 
@@ -35,7 +37,8 @@ class Validate {
      *
      * @return Validate $this
      */
-    public function reset($data) {
+    public function reset($data)
+    {
         $this->data = $data;
         $this->regex->reset($this->data);
 
@@ -47,7 +50,8 @@ class Validate {
      *
      * @return mixed
      */
-    public function get() {
+    public function get()
+    {
         return $this->data;
     }
 
@@ -56,7 +60,8 @@ class Validate {
      *
      * @return array|string
      */
-    public function getErrors($asString = false) {
+    public function getErrors($asString = false)
+    {
         if ($asString) {
             $errors = '';
 
@@ -73,7 +78,8 @@ class Validate {
     /**
      * @return bool
      */
-    public function uri() {
+    public function uri()
+    {
         if ($this->regex->match('[^\p{L&}\p{Nd}\-\/_:?&=~#%]') === 1) {
             $this->errors[] = 'The following characters are invalid for a URI: ' . implode($this->regex->store);
 
@@ -90,14 +96,16 @@ class Validate {
     /**
      * @return bool
      */
-    public function integer() {
+    public function integer()
+    {
         return ctype_digit((string)$this->data);
     }
 
     /**
      * @return $this
      */
-    public function float() {
+    public function float()
+    {
         $numberFormatter = new \NumberFormatter('en_US', \NumberFormatter::DECIMAL);
         $this->data = $numberFormatter->parse($this->data);
 
@@ -109,7 +117,8 @@ class Validate {
      *
      * @return bool|int
      */
-    public function alpha() {
+    public function alpha()
+    {
         return $this->regex->match(Regex::NOT_ALPHA);
     }
 
@@ -118,21 +127,24 @@ class Validate {
      *
      * @return bool|int
      */
-    public function alphanumeric() {
+    public function alphanumeric()
+    {
         return $this->regex->match(Regex::NOT_ALNUM);
     }
 
     /**
      * @return bool
      */
-    public function hex() {
+    public function hex()
+    {
         return ctype_xdigit((string)$this->data);
     }
 
     /**
      * @return bool
      */
-    public function numeric() {
+    public function numeric()
+    {
         return is_numeric($this->data);
     }
 
@@ -141,7 +153,8 @@ class Validate {
      *
      * @return bool|int
      */
-    public function word() {
+    public function word()
+    {
         return $this->regex->match(Regex::NOT_WORD);
     }
 

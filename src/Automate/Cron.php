@@ -7,8 +7,8 @@ namespace Envms\Osseus\Automate;
  *
  * @todo Separate individual log implementations into their own log classes, not only supporting Monolog
  */
-
-class Cron {
+class Cron
+{
 
     /** @var mixed */
     protected $log;
@@ -29,7 +29,8 @@ class Cron {
      * @param        $log
      * @param string $logPath
      */
-    public function __construct(\PDO $pdo, $log, string $logPath) {
+    public function __construct(\PDO $pdo, $log, string $logPath)
+    {
         $this->pdo = $pdo;
 
         $this->logHandler = new \Monolog\Handler\StreamHandler($logPath, \Monolog\Logger::INFO);
@@ -42,7 +43,8 @@ class Cron {
     /**
      * @param string $message
      */
-    public function log(string $message) {
+    public function log(string $message)
+    {
         $this->log->pushHandler($this->logHandler);
         $this->log->info($message);
     }

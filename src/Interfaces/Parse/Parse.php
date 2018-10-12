@@ -5,7 +5,8 @@ namespace Envms\Osseus\Interfaces\Parse;
 /**
  * Interface Controller
  */
-interface Parse {
+interface Parse
+{
 
     /**
      * @param $input

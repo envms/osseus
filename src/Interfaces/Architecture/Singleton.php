@@ -5,7 +5,8 @@ namespace Envms\Osseus\Interfaces\Architecture;
 /**
  * Interface Singleton
  */
-interface Singleton {
+interface Singleton
+{
 
     static function instance();
 

@@ -2,7 +2,7 @@
 
 namespace Envms\Osseus\Client;
 
-use Envms\Osseus\Security\{Cipher,Hash};
+use Envms\Osseus\Security\{Cipher, Hash};
 
 /**
  * Class Session
@@ -11,14 +11,17 @@ use Envms\Osseus\Security\{Cipher,Hash};
  *
  * @todo Inject class dependencies
  */
-class Session extends \SessionHandler {
+class Session extends \SessionHandler
+{
 
+    /** @var mixed|null|string */
     protected $name;
 
     /**
      * @param mixed $name
      */
-    public function __construct($name = null) {
+    public function __construct($name = null)
+    {
         $this->name = (isset($name)) ? $name : ini_get('session.name');
 
         session_name($this->name);
@@ -31,7 +34,8 @@ class Session extends \SessionHandler {
      *
      * @return bool
      */
-    public function start() {
+    public function start()
+    {
         $started = false;
         if (session_status() === PHP_SESSION_NONE) {
             if (session_start()) {
@@ -49,7 +53,8 @@ class Session extends \SessionHandler {
     /**
      * @return bool
      */
-    public function forget() {
+    public function forget()
+    {
         if (session_status() === PHP_SESSION_NONE) {
             return true; // no session to kill in the first place, so return success
         }
@@ -67,7 +72,8 @@ class Session extends \SessionHandler {
      *
      * @return bool
      */
-    public function refresh() {
+    public function refresh()
+    {
         return session_regenerate_id(true);
     }
 
@@ -78,7 +84,8 @@ class Session extends \SessionHandler {
      *
      * @return string
      */
-    public function read($id) {
+    public function read($id)
+    {
         return parent::read($id);
     }
 
@@ -91,7 +98,8 @@ class Session extends \SessionHandler {
      *
      * @return bool
      */
-    public function write($id, $data) {
+    public function write($id, $data)
+    {
         return parent::write($id, $data);
     }
 
@@ -102,13 +110,13 @@ class Session extends \SessionHandler {
      *
      * @return bool
      */
-    public function expired($ttl = 30) {
+    public function expired($ttl = 30)
+    {
         $lastActivity = $this->get('ssn.lastActivity');
 
         if ($lastActivity !== false && (time() - $lastActivity) > ($ttl * 60)) {
             $expired = true;
-        }
-        else {
+        } else {
             $this->assign('ssn.lastActivity', time());
             $expired = false;
         }
@@ -122,13 +130,14 @@ class Session extends \SessionHandler {
      * @todo support IPv6
      * @return bool
      */
-    public function signature() {
-        $hash      = new Hash();
+    public function signature()
+    {
+        $hash = new Hash();
         $signature = $this->get('ssn.signature');
 
         //if (filter_var($_SERVER['REMOTE_ADDR'], FILTER_FLAG_IPV6) !== false) {}
 
-        $client          = $_SERVER['HTTP_USER_AGENT'] . (ip2long($_SERVER['REMOTE_ADDR']) & ip2long('255.255.0.0'));
+        $client = $_SERVER['HTTP_USER_AGENT'] . (ip2long($_SERVER['REMOTE_ADDR']) & ip2long('255.255.0.0'));
         $clientSignature = $hash->data($client);
 
         if ($signature !== false) {
@@ -143,7 +152,8 @@ class Session extends \SessionHandler {
     /**
      * @return bool
      */
-    public function isValid() {
+    public function isValid()
+    {
         return !$this->expired() && $this->signature();
     }
 
@@ -154,8 +164,9 @@ class Session extends \SessionHandler {
      * @param $name
      * @param $value
      */
-    public function assign($name, $value) {
-        $parsed  = explode('.', $name);
+    public function assign($name, $value)
+    {
+        $parsed = explode('.', $name);
         $session = &$_SESSION;
 
         while (count($parsed) > 1) {
@@ -176,16 +187,16 @@ class Session extends \SessionHandler {
      *
      * @return null
      */
-    public function get(string $name) {
+    public function get(string $name)
+    {
         $parsed = explode('.', $name);
-        $rtn    = $_SESSION;
+        $rtn = $_SESSION;
 
         while ($parsed) {
             $next = array_shift($parsed);
             if (isset($rtn[$next])) {
                 $rtn = $rtn[$next];
-            }
-            else {
+            } else {
                 $rtn = false;
                 break;
             }

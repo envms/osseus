@@ -5,7 +5,8 @@ namespace Envms\Osseus\Interfaces\Model;
 /**
  * Interface Model
  */
-interface Model {
+interface Model
+{
 
     /**
      * @param  string $key

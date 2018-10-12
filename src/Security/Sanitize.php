@@ -10,7 +10,8 @@ use Envms\Osseus\Utils\Regex;
  * Any user submitted data that needs cleaning by way of escaping or removing
  * invalid and/or special characters should be passed through the necessary methods within the Sanitize class.
  */
-class Sanitize {
+class Sanitize
+{
 
     /** @var mixed - Retains the original form of the data for comparison */
     protected $original;
@@ -22,9 +23,10 @@ class Sanitize {
     /**
      * @param $data
      */
-    public function __construct($data) {
+    public function __construct($data)
+    {
         $this->sanitized = $this->original = $data;
-        $this->regex     = new Regex($this->sanitized);
+        $this->regex = new Regex($this->sanitized);
     }
 
     /**
@@ -35,7 +37,8 @@ class Sanitize {
      * @return $this
      */
 
-    public function reset($data) {
+    public function reset($data)
+    {
         $this->sanitized = $this->original = $data;
         $this->regex->reset($this->sanitized);
 
@@ -48,7 +51,8 @@ class Sanitize {
      * @return mixed
      */
 
-    public function getSanitized() {
+    public function getSanitized()
+    {
         return $this->sanitized;
     }
 
@@ -58,7 +62,8 @@ class Sanitize {
      * @return Sanitize
      */
 
-    public function html($flags = ENT_COMPAT | ENT_HTML5) {
+    public function html($flags = ENT_COMPAT | ENT_HTML5)
+    {
         $this->sanitized = htmlspecialchars($this->sanitized, $flags);
 
         return $this;
@@ -70,7 +75,8 @@ class Sanitize {
      *
      * @return Sanitize
      */
-    public function sql() {
+    public function sql()
+    {
         $this->sanitized = addcslashes($this->sanitized, "\"'`;_%\\\0\r\n");
 
         return $this;
@@ -79,8 +85,9 @@ class Sanitize {
     /**
      * @return Sanitize
      */
-    public function integer() {
-        $nf              = new \NumberFormatter('en_US', \NumberFormatter::DECIMAL);
+    public function integer()
+    {
+        $nf = new \NumberFormatter('en_US', \NumberFormatter::DECIMAL);
         $this->sanitized = intval($nf->parse($this->sanitized));
 
         return $this;
@@ -89,8 +96,9 @@ class Sanitize {
     /**
      * @return Sanitize
      */
-    public function float() {
-        $nf              = new \NumberFormatter('en_US', \NumberFormatter::DECIMAL);
+    public function float()
+    {
+        $nf = new \NumberFormatter('en_US', \NumberFormatter::DECIMAL);
         $this->sanitized = $nf->parse($this->sanitized);
 
         return $this;
@@ -101,7 +109,8 @@ class Sanitize {
      *
      * @return Sanitize
      */
-    public function alpha() {
+    public function alpha()
+    {
         $this->sanitized = $this->regex->replace(Regex::NOT_ALPHA);
 
         return $this;
@@ -112,7 +121,8 @@ class Sanitize {
      *
      * @return Sanitize
      */
-    public function alnum() {
+    public function alnum()
+    {
         $this->sanitized = $this->regex->replace(Regex::NOT_ALNUM);
 
         return $this;
@@ -123,7 +133,8 @@ class Sanitize {
      *
      * @return Sanitize
      */
-    public function hex() {
+    public function hex()
+    {
         $this->sanitized = $this->regex->replace(Regex::NOT_HEX);
 
         return $this;
@@ -134,7 +145,8 @@ class Sanitize {
      *
      * @return Sanitize
      */
-    public function numeric() {
+    public function numeric()
+    {
         $this->sanitized = $this->regex->replace(Regex::NOT_NUM);
 
         return $this;
@@ -145,7 +157,8 @@ class Sanitize {
      *
      * @return Sanitize
      */
-    public function word() {
+    public function word()
+    {
         $this->sanitized = $this->regex->replace(Regex::NOT_WORD);
 
         return $this;

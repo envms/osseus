@@ -10,12 +10,14 @@ namespace Envms\Osseus\Exception;
  *
  * @todo Implement handling based on environment settings
  */
-class Handler {
+class Handler
+{
 
     /**
      * @param \Throwable $e
      */
-    public static function get(\Throwable $e) {
+    public static function get(\Throwable $e)
+    {
         echo '<strong style="font-family:Consolas,monospace;color:#c03;">' . $e . '</strong>';
     }
 

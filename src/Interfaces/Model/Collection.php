@@ -7,7 +7,8 @@ use Envms\Osseus\Model\Model;
 /**
  * Interface Collection
  */
-interface Collection {
+interface Collection
+{
 
     /**
      * @param  int $id

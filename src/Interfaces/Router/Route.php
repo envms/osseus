@@ -7,7 +7,8 @@ use Envms\Osseus\Parse\Uri;
 /**
  * Interface Route
  */
-interface Route {
+interface Route
+{
 
     /**
      * @param  Uri    $uri
