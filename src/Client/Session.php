@@ -79,9 +79,7 @@ class Session extends \SessionHandler {
      * @return string
      */
     public function read($id) {
-        $cipher = new Cipher();
-
-        return $cipher->ecbDecipher(parent::read($id));
+        return parent::read($id);
     }
 
     /**
@@ -94,9 +92,7 @@ class Session extends \SessionHandler {
      * @return bool
      */
     public function write($id, $data) {
-        $cipher = new Cipher();
-
-        return parent::write($id, $cipher->ecbEncipher($data));
+        return parent::write($id, $data);
     }
 
     /**
