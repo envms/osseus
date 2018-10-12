@@ -1,6 +1,6 @@
 # Osseus Framework - alpha-1
 
-Osseus is a light and tiny PHP API framework and toolbox. Its goal is to be flexible
+Osseus is a light and tiny PHP framework and toolbox. Its goal is to be flexible
 and impartial to code and database structures. Currently, it contains a built-in, basic
 JSON parser class, but the `Parse` interface can be extended to support XML, YAML etc.
 
@@ -13,6 +13,6 @@ this purpose.
 ### Contributions
 Contributors are more than welcome to help test and improve Env
 
-### Looking forward to 'alpha-2'
+### Looking forward to 'alpha-2' (v0.1.0)
 - Create core unit tests
 - Flesh out `Carbon` interface and class
