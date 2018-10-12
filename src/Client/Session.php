@@ -27,6 +27,8 @@ class Session extends \SessionHandler {
     /**
      * Starts a new or continues a current session with a 10% chance of regenerating the ID
      *
+     * @throws \Exception
+     *
      * @return bool
      */
     public function start() {
@@ -37,7 +39,9 @@ class Session extends \SessionHandler {
             }
         }
 
-        $this->assign('cipher.iv', Cipher::setIv($this->get('cipher.iv'))); // if an iv exists within the current session, use it
+        $cipher = new Cipher('');
+
+        $this->assign('cipher.nonce', $cipher->setNonce($this->get('cipher.nonce'))); // if an iv exists within the current session, use it
 
         return $started;
     }
@@ -75,9 +79,7 @@ class Session extends \SessionHandler {
      * @return string
      */
     public function read($id) {
-        $cipher = new Cipher();
-
-        return $cipher->ecbDecipher(parent::read($id));
+        return parent::read($id);
     }
 
     /**
@@ -90,9 +92,7 @@ class Session extends \SessionHandler {
      * @return bool
      */
     public function write($id, $data) {
-        $cipher = new Cipher();
-
-        return parent::write($id, $cipher->ecbEncipher($data));
+        return parent::write($id, $data);
     }
 
     /**

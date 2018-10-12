@@ -5,26 +5,24 @@ namespace Envms\Osseus\Security;
 /**
  * Class Cipher
  *
- * @todo Refactor to use OpenSSL instead of now-deprecated Mcrypt
  */
-class Cipher {
+class Cipher
+{
+    /** @var $nonce - should be stored in session data */
+    private $nonce;
 
-    /** @const CIPHER int */
-    const CIPHER = MCRYPT_RIJNDAEL_256;
-    /** @const MODE int */
-    const MODE = MCRYPT_MODE_CBC;
-
-    // TODO figure out a way of not making this static, and using dependency injection instead
-    /** @var string - stored in Session() after initialization | must be identical across all Cipher instances */
-    private static $iv;
+    /** @var string $key */
+    private $key;
 
     /**
      * Cipher constructor.
      *
-     * @param string $secret - this should only ever be set within env.json and NEVER publicly shared
+     * @param $key - this should ideally be set within env.json and NEVER publicly shared. If
+     *               env.json is not being used, the key can be passed manually
      */
-    public function __construct(string $secret) {
-
+    public function __construct(string $key)
+    {
+        $this->key = $key;
     }
 
     /**
@@ -34,7 +32,8 @@ class Cipher {
      *
      * @return mixed|string
      */
-    public function encode($string) {
+    public function encode($string)
+    {
         $data = base64_encode($string);
         $data = str_replace(['+', '/', '='], ['-', '_', ''], $data);
 
@@ -48,7 +47,8 @@ class Cipher {
      *
      * @return string
      */
-    public function decode($string) {
+    public function decode($string)
+    {
         $data = str_replace(['-', '_'], ['+', '/'], $string);
         $mod4 = strlen($data) % 4;
 
@@ -60,14 +60,17 @@ class Cipher {
     }
 
     /**
-     * The preferred method to encrypt data. Uses the static initialization vector passed into or generated from setIv()
+     * The preferred method to encrypt data. Securely erases the data passed to sodium after encryption
      *
      * @param $text
      *
      * @return mixed|string
      */
-    public function encipher($text) {
-        $cipher = mcrypt_encrypt(self::CIPHER, self::SECRET, $text, self::MODE, self::$iv);
+    public function encipher($text)
+    {
+        $cipher = sodium_crypto_secretbox($text, $this->nonce, $this->key);
+
+        sodium_memzero($text);
 
         return $this->encode($cipher);
     }
@@ -77,48 +80,33 @@ class Cipher {
      *
      * @return string
      */
-    public function decipher($cipher) {
+    public function decipher($cipher)
+    {
         $cipher = $this->decode($cipher);
-        $text   = mcrypt_decrypt(self::CIPHER, self::SECRET, $cipher, self::MODE, self::$iv);
+        $cipherText = mb_substr($cipher, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+        $plaintext = sodium_crypto_secretbox_open(
+            $cipherText,
+            $this->nonce,
+            $this->key
+        );
 
-        return rtrim($text, "\0");
+        sodium_memzero($cipherText);
+
+        return rtrim($plaintext, "\0");
     }
 
     /**
-     * @param $text
+     * @param $nonce
      *
-     * @return mixed|string
+     * @throws \Exception
      *
-     * @note Use only when use of an initialization vector is not possible
+     * @return string $nonce
      */
-    public function ecbEncipher($text) {
-        $cipher = mcrypt_encrypt(self::CIPHER, self::SECRET, $text, MCRYPT_MODE_ECB);
+    public function setNonce($nonce = false)
+    {
+        $this->nonce = ($nonce === false) ? random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES) : $nonce;
 
-        return $this->encode($cipher);
-    }
-
-    /**
-     * @param $cipher
-     *
-     * @return string
-     */
-    public function ecbDecipher($cipher) {
-        $cipher = $this->decode($cipher);
-        $text   = mcrypt_decrypt(self::CIPHER, self::SECRET, $cipher, MCRYPT_MODE_ECB);
-
-        return rtrim($text, "\0");
-    }
-
-    /**
-     * @param  mixed $iv
-     *
-     * @return string $iv
-     */
-    public static function setIv($iv = false) {
-        $size     = mcrypt_get_iv_size(self::CIPHER, self::MODE);
-        self::$iv = ($iv === false) ? mcrypt_create_iv($size) : $iv;
-
-        return self::$iv;
+        return $this->nonce;
     }
 
 }
