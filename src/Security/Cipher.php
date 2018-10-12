@@ -6,20 +6,23 @@ namespace Envms\Osseus\Security;
  * Class Cipher
  *
  */
-class Cipher {
+class Cipher
+{
 
-    // TODO figure out a way of not making this static, and using dependency injection instead
-    /** @var string - stored in Session() after initialization | must be identical across all Cipher instances */
-    private static $iv;
-    private static $nonce;
+    /** @var $nonce - stored in Session() after initialization | must be identical across all Cipher instances */
+    private $nonce;
+
+    /** @var string $secret */
+    private $secret;
 
     /**
      * Cipher constructor.
      *
-     * @param string $secret - this should only ever be set within env.json and NEVER publicly shared
+     * @param $secret - this should only ever be set within env.json and NEVER publicly shared
      */
-    public function __construct(string $secret) {
-
+    public function __construct(string $secret)
+    {
+        $this->secret = $secret;
     }
 
     /**
