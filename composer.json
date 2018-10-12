@@ -1,7 +1,7 @@
 {
 	"name": "envms/osseus",
-	"description": "Osseus is a lightweight framework for creating fast API-centric applications",
-	"keywords": ["framework", "skeleton", "fluent", "api", "library"],
+	"description": "Osseus is a lightweight library for creating fast applications. It can be used as a framework and to create API-centric software",
+	"keywords": ["framework", "skeleton", "fluent", "api", "library", "application", "restful"],
 	"homepage": "https://github.com/envms/osseus",
 	"license": ["GPL-3.0"],
 	"authors": [
