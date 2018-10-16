@@ -3,7 +3,7 @@
 namespace Envms\Osseus\Client;
 
 use Envms\Osseus\Security\{Cipher, Hash};
-
+use Envms\Osseus\Utils\Net;
 /**
  * Class Session
  *
@@ -147,10 +147,8 @@ class Session extends \SessionHandler
         $hash = new Hash();
         $signature = $this->get('ssn.signature');
 
-        //if (filter_var($_SERVER['REMOTE_ADDR'], FILTER_FLAG_IPV6) !== false) {}
-
-        $client = $_SERVER['HTTP_USER_AGENT'] . (ip2long($_SERVER['REMOTE_ADDR']) & ip2long('255.255.0.0'));
-        $clientSignature = $hash->data($client);
+        $client = $_SERVER['HTTP_USER_AGENT'] . Net::getIpSubnet($_SERVER['REMOTE_ADDR']);
+        $clientSignature = $this->hash->data($client);
 
         if ($signature !== false) {
             return $signature === $clientSignature;
