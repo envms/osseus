@@ -55,9 +55,7 @@ class Session extends \SessionHandler
             }
         }
 
-        $cipher = new Cipher('');
-
-        $this->assign('cipher.nonce', $cipher->setNonce($this->get('cipher.nonce'))); // if an iv exists within the current session, use it
+        $this->set('cipher:nonce', $this->cipher->setNonce($this->get('cipher:nonce'))); // if a nonce exists within the current session, use it
 
         return $started;
     }
