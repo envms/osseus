@@ -76,21 +76,13 @@ class Validate
     }
 
     /**
+     * @note This will NOT validate non-ASCII URIs
+     *
      * @return bool
      */
-    public function uri()
+    public function url()
     {
-        if ($this->regex->match('[^\p{L&}\p{Nd}\-\/_:?&=~#%]') === 1) {
-            $this->errors[] = 'The following characters are invalid for a URI: ' . implode($this->regex->store);
-
-            return false;
-        }
-
-        if (!$this->regex->match('((http(s)?)?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}(\.[a-z]{2,6})?\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)')) {
-            $this->errors[] = '';
-        }
-
-        return true;
+        return filter_var($this->data, FILTER_VALIDATE_URL);
     }
 
     /**
