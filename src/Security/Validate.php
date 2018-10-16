@@ -60,7 +60,7 @@ class Validate
      *
      * @return array|string
      */
-    public function getErrors($asString = false)
+    public function getErrors(bool $asString = false)
     {
         if ($asString) {
             $errors = '';
@@ -98,10 +98,7 @@ class Validate
      */
     public function float()
     {
-        $numberFormatter = new \NumberFormatter('en_US', \NumberFormatter::DECIMAL);
-        $this->data = $numberFormatter->parse($this->data);
-
-        return $this;
+        return is_float($this->data + 0);
     }
 
     /**
