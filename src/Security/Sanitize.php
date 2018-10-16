@@ -36,7 +36,6 @@ class Sanitize
      *
      * @return $this
      */
-
     public function reset($data)
     {
         $this->sanitized = $this->original = $data;
@@ -46,22 +45,10 @@ class Sanitize
     }
 
     /**
-     * Access protected sanitized data outside the class
-     *
-     * @return mixed
-     */
-
-    public function getSanitized()
-    {
-        return $this->sanitized;
-    }
-
-    /**
      * @param int $flags
      *
      * @return Sanitize
      */
-
     public function html($flags = ENT_COMPAT | ENT_HTML5)
     {
         $this->sanitized = htmlspecialchars($this->sanitized, $flags);
@@ -162,6 +149,26 @@ class Sanitize
         $this->sanitized = $this->regex->replace(Regex::NOT_WORD);
 
         return $this;
+    }
+
+    /**
+     * Access sanitized data outside of the class instance
+     *
+     * @return mixed
+     */
+    public function getOriginal()
+    {
+        return $this->original;
+    }
+
+    /**
+     * Access sanitized data outside of the class instance
+     *
+     * @return mixed
+     */
+    public function getSanitized()
+    {
+        return $this->sanitized;
     }
 
 }
