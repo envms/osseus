@@ -8,7 +8,7 @@ use Envms\Osseus\Interfaces\Architecture\Singleton as SingletonInterface;
  * Class Singleton
  *
  * @note When using Osseus, the singleton pattern is recommended to only be used in very specific use cases.
- *       An example would be a library which, without ensuring only one instance, would need be
+ *       An example would be a class which, without ensuring only one instance, would need be
  *       injected into nearly every class within the application.
  */
 abstract class Singleton implements SingletonInterface
