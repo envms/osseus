@@ -8,13 +8,11 @@ use Envms\Osseus\Utils\Net;
  * Class Session
  *
  * Handles and secures all session data.
- *
- * @todo Inject class dependencies
  */
 class Session extends \SessionHandler
 {
 
-    /** @var mixed|null|string */
+    /** @var string|null */
     protected $name;
 
     /** @var Cipher */
@@ -31,7 +29,7 @@ class Session extends \SessionHandler
      */
     public function __construct(Cipher $cipher, Hash $hash, ?string $name = null)
     {
-        $this->name = (isset($name)) ? $name : ini_get('session.name');
+        $this->name = ($name !== null) ? $name : ini_get('ssn:name');
 
         session_name($this->name);
 
@@ -122,13 +120,13 @@ class Session extends \SessionHandler
      */
     public function expired($ttl = 30)
     {
-        $lastActivity = $this->get('ssn.lastActivity');
+        $lastActivity = $this->get('ssn:lastActivity');
 
         if ($lastActivity !== false && (time() - $lastActivity) > ($ttl * 60)) {
-            $expired = true;
+            return true;
         } else {
-            $this->assign('ssn.lastActivity', time());
-            $expired = false;
+            $this->set('ssn:lastActivity', time());
+            return false;
         }
 
         return $expired;
@@ -142,8 +140,7 @@ class Session extends \SessionHandler
      */
     public function signature()
     {
-        $hash = new Hash();
-        $signature = $this->get('ssn.signature');
+        $signature = $this->get('ssn:signature');
 
         $client = $_SERVER['HTTP_USER_AGENT'] . Net::getIpSubnet($_SERVER['REMOTE_ADDR']);
         $clientSignature = $this->hash->data($client);
@@ -152,7 +149,7 @@ class Session extends \SessionHandler
             return $signature === $clientSignature;
         }
 
-        $this->assign('ssn.signature', $clientSignature);
+        $this->set('ssn:signature', $clientSignature);
 
         return true;
     }
@@ -172,16 +169,18 @@ class Session extends \SessionHandler
      * @param $name
      * @param $value
      */
-    public function assign($name, $value)
+    public function set($name, $value)
     {
-        $parsed = explode('.', $name);
+        $parsed = explode(':', $name);
         $session = &$_SESSION;
 
         while (count($parsed) > 1) {
             $next = array_shift($parsed);
+
             if (!isset($session[$next]) || !is_array($session[$next])) {
                 $session[$next] = [];
             }
+
             $session = &$session[$next];
         }
 
@@ -197,20 +196,21 @@ class Session extends \SessionHandler
      */
     public function get(string $name)
     {
-        $parsed = explode('.', $name);
-        $rtn = $_SESSION;
+        $parsed = explode(':', $name);
+        $sessionValue = $_SESSION;
 
         while ($parsed) {
             $next = array_shift($parsed);
-            if (isset($rtn[$next])) {
-                $rtn = $rtn[$next];
+
+            if (isset($sessionValue[$next])) {
+                $sessionValue = $sessionValue[$next];
             } else {
-                $rtn = false;
+                $sessionValue = false;
                 break;
             }
         }
 
-        return $rtn;
+        return $sessionValue;
     }
 
 }
