@@ -86,8 +86,6 @@ class Session extends \SessionHandler
     }
 
     /**
-     * Calls \SessionHandler's read function and deciphers the encrypted session data.
-     *
      * @param string $id
      *
      * @return string
@@ -98,9 +96,6 @@ class Session extends \SessionHandler
     }
 
     /**
-     * Calls \SessionHandler's write function after encrypting the session data. Uses ECB mode
-     * to avoid impossible decryption when initialization vector is stored in the encrypted session data.
-     *
      * @param string $id
      * @param string $data
      *
@@ -128,14 +123,11 @@ class Session extends \SessionHandler
             $this->set('ssn:lastActivity', time());
             return false;
         }
-
-        return $expired;
     }
 
     /**
      * Performs a match to ensure the same client is requesting the current session
      *
-     * @todo support IPv6
      * @return bool
      */
     public function signature()
