@@ -17,14 +17,26 @@ class Session extends \SessionHandler
     /** @var mixed|null|string */
     protected $name;
 
+    /** @var Cipher */
+    public $cipher;
+    /** @var Hash */
+    public $hash;
+
     /**
-     * @param mixed $name
+     * Session constructor
+     *
+     * @param Cipher $cipher
+     * @param Hash   $hash
+     * @param string $name
      */
-    public function __construct($name = null)
+    public function __construct(Cipher $cipher, Hash $hash, ?string $name = null)
     {
         $this->name = (isset($name)) ? $name : ini_get('session.name');
 
         session_name($this->name);
+
+        $this->cipher = $cipher;
+        $this->hash = $hash;
     }
 
     /**
