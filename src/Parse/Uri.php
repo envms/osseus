@@ -31,31 +31,30 @@ class Uri
 
     /**
      * @param string $uri
-     * @param bool   $isApi
      */
-    public function __construct(string $uri, bool $isApi)
+    public function __construct(string $uri)
     {
         $this->uri = parse_url($uri);
 
         if ($this->uri !== false) {
-            $route = $this->api['route'] = explode('/', $this->uri['path']);
-            unset($route[0]); // before first slash is always empty
+            $this->route = explode('/', trim($this->uri['path'], '/'));
 
-            if ($isApi === true) {
-                $this->api['version'] = $route[1];
-                unset($route[1]);
+            $isApi = strpos($this->route[0], 'api') === 0;
 
-                $this->api['namespace'] = implode('\\', array_map('ucfirst', explode('-', $route[2])));
-                unset($route[2]);
-
-                $this->setParams($route);
-                $this->setOptions();
-            } else { // if this isn't an api call, use the standard application routes
-                $this->controller = ucfirst($route[1]);
-                $this->action = $route[2];
-                $this->setParams($route);
-                $this->setOptions();
+            if ($isApi) {
+                array_shift($this->route);
+                $this->api['version'] = array_shift($this->route);
             }
+
+            $route = $this->route;
+
+            $this->module = str_replace('-', '', ucwords(array_shift($route), '-'));
+            $this->action = lcfirst(str_replace('-', '', ucwords(array_shift($route), '-')));
+            $this->params = $route;
+
+            unset($route);
+
+            $this->setOptions();
         }
     }
 
