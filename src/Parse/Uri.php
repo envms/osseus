@@ -21,7 +21,7 @@ class Uri
     /** @var array - contains API params */
     protected $api = [];
     /** @var string */
-    protected $controller = '';
+    protected $module = '';
     /** @var string */
     protected $action = '';
     /** @var array */
@@ -118,9 +118,9 @@ class Uri
     /**
      * @return string
      */
-    public function getController()
+    public function getModule()
     {
-        return $this->controller;
+        return $this->module;
     }
 
     /**
