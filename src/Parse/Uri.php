@@ -16,7 +16,9 @@ class Uri
 
     /** @var array|bool */
     protected $uri;
-    /** @var array - Populated only when the constructor's $isApi is true */
+    /** @var array - populated at Uri construction time */
+    protected $route = [];
+    /** @var array - contains API params */
     protected $api = [];
     /** @var string */
     protected $controller = '';
@@ -94,7 +96,7 @@ class Uri
      */
     public function getRoute()
     {
-        return $this->api['route'];
+        return $this->route;
     }
 
     /**
