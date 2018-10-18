@@ -188,11 +188,19 @@ class Uri implements Parse
     }
 
     /**
-     * @param $params
+     * @return bool
      */
-    public function setParams($params)
+    public function isApiCall() {
+        return isset($this->api['version']);
+    }
+
+    /**
+     * @param      $value
+     * @param bool $prepend
+     */
+    public function addParam($value, bool $prepend = false)
     {
-        $this->params = (!empty($params[3])) ? array_values($params) : null;
+        ($prepend) ? array_unshift($this->params, $value) : array_push($this->params, $value);
     }
 
     /**
