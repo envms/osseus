@@ -1,18 +1,22 @@
-# Osseus Framework - alpha-1
+# Osseus Framework
 
-Osseus is a light and tiny PHP framework and toolbox. Its goal is to be flexible
-and impartial to code and database structures. Currently, it contains a built-in, basic
-JSON parser class, but the `Parse` interface can be extended to support XML, YAML etc.
+#### Current version is alpha-2 (v0.1.0)
 
-The plan for this is to also be able to interface heavily with FluentPDO 2.0
-(development in progress) and provide quick and seamless database interactions.
+Osseus is a light and tiny PHP framework and toolbox. Its goal is to be flexible and impartial to code and database structures.
 
-It can be used as a standard application framework, but was not designed for
-this purpose.
+The plan for this is to also be able to interface with FluentPDO 2.0 and provide quick and seamless database interactions.
+
+Osseus can be used as a standard application framework or simply as a utility library.
+
+### Features
+
+- light and fast router with a smart URI parser
+- built-in security tools to validate and sanitize data
+- an Internationalization template system to implement new languages quickly and easily
+- classic MVC system with some small additions
 
 ### Contributions
 Contributors are more than welcome to help test and improve Env
 
-### Looking forward to 'alpha-2' (v0.1.0)
-- Create core unit tests
+### Looking forward to 'alpha-3' (v0.2.0)
 - Flesh out `Carbon` interface and class
