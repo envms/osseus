@@ -14,62 +14,61 @@ class Json implements Parse
 {
 
     /** @var array */
-    protected $error;
+    protected $error = ['code' => JSON_ERROR_NONE, 'message' => 'No error'];
 
-    /** @var mixed */
-    public $data;
-
-    /**
-     * Json constructor
-     */
-    public function __construct()
-    {
-        $this->data = null;
-        $this->error = ['code' => JSON_ERROR_NONE, 'message' => 'No error'];
-    }
+    /** @var null|string */
+    public $rawData = null;
+    /** @var null|array|object */
+    public $parsedData = null;
 
     /**
      * Assigns the referenced property $input to the parsed JSON object
      *
      * @param string $input
-     * @param array  $options
+     * @param array  $flags
      *
      * @throws Invalid
+     *
+     * @return array
      */
-    public function read($input, $options = ['toArray' => false])
+    public function read($input, $flags = ['toArray' => false])
     {
-        $this->data = json_decode($input, $options['toArray']);
+        $this->rawData = $input;
+        $this->parsedData = json_decode($input, $flags['toArray']);
 
-        if ($this->data === null) {
+        if ($this->parsedData === null) {
             $error['code'] = json_last_error();
             $error['message'] = json_last_error_msg();
 
             throw new Invalid('Unable to decode JSON string. Invalid JSON');
         }
+
+        return $this->parsedData;
     }
 
     /**
      * Assigns the referenced property $data to the parsed JSON object
      *
      * @param mixed $input
-     * @param array $options
+     * @param array $flags
      *
      * @throws Invalid
      *
      * @return string
      */
-    public function write($input, $options = ['options' => JSON_UNESCAPED_UNICODE, 'depth' => 512])
+    public function write($input, $flags = ['options' => JSON_UNESCAPED_UNICODE, 'depth' => 512])
     {
-        $this->data = json_encode($input, $options['options'], $options['depth']);
+        $this->parsedData = $input;
+        $this->rawData = json_encode($input, $flags['options'], $flags['depth']);
 
-        if ($this->data === false) {
+        if ($this->rawData === false) {
             $error['code'] = json_last_error();
             $error['message'] = json_last_error_msg();
 
             throw new Invalid('Unable to encode input to string');
         }
 
-        return $this->data;
+        return $this->rawData;
     }
 
     /**
