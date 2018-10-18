@@ -2,30 +2,67 @@
 
 namespace Envms\Osseus\Dev;
 
+
+use Envms\Osseus\Architecture\Singleton;
+use Envms\Osseus\Server\Environment;
+
 /**
  * Class Debug
  *
  * A collection of quick debugging tools and performance metrics
  */
-class Debug
+class Debug extends Singleton
 {
 
     /** @const - used to add ascii line breaks to printed data sets */
-    const LINEBREAK_TEXT = "\r\n";
+    protected const LINEBREAK_TEXT = "\r\n";
     /** @const - used to add html line breaks to printed data sets */
-    const LINEBREAK_HTML = "<br>";
+    protected const LINEBREAK_HTML = "<br>";
     /** @const - used to add line breaks to printed data sets */
-    const LINEBREAK = "<br>\r\n";
+    protected const LINEBREAK_BOTH = "<br>\r\n";
     /** @const - html friendly formatting */
-    const PRE = ['<pre>', '</pre>'];
+    protected const PRE = ['<pre>', '</pre>'];
+
+    /** @var Environment */
+    public $environment;
+
+    /** @var int */
+    public $envMax;
+    /** @var string */
+    public $linebreak;
+
+    /**
+     * @return Debug|mixed
+     */
+    public static function instance()
+    {
+        return parent::instance();
+    }
+
+    /**
+     * @param int $envMax  - the maximum environment which would still output debug information. An example would be if this
+     *                       was set to STAGING, only production environments would NOT show debug info
+     * @param string $sapi - the current server API
+     */
+    public function init(int $envMax, string $sapi)
+    {
+        $this->linebreak = (strpos($sapi, 'cli') !== false) ? self::LINEBREAK_TEXT : self::LINEBREAK_BOTH;
+        $this->envMax = $envMax;
+
+        $this->environment = Environment::instance();
+    }
 
     /**
      * Exits and provides additional information on exactly where the script was killed
      */
-    public static function ks()
+    public function ks()
     {
-        $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2)[1];
-        exit("<b style='font-family:Consolas,monospace;color:#c04;'>Application terminated ({$backtrace['file']} - Line {$backtrace['line']})</b>");
+        if ($this->environment->getCurrent() <= $this->envMax) {
+            $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2)[1];
+            exit("<b style='font-family:Consolas,monospace;color:#c04;'>Application terminated ({$backtrace['file']} - Line {$backtrace['line']})</b>");
+        } else {
+            exit('Exited');
+        }
     }
 
     /**
@@ -35,19 +72,21 @@ class Debug
      * @param string $title
      * @param string $titleColor
      */
-    public static function p($var, $title = '', $titleColor = '#c22')
+    public function p($var, $title = '', $titleColor = '#c22')
     {
-        $var = self::determineOutput($var);
-        echo self::PRE[0];
+        if ($this->environment->getCurrent() <= $this->envMax) {
+            $var = self::determineOutput($var);
+            echo self::PRE[0];
 
-        if ($title !== '') {
-            echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
+            if ($title !== '') {
+                echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
+            }
+
+            echo $var
+                . self::PRE[1]
+                . $this->linebreak
+                . $this->linebreak;
         }
-
-        echo $var
-            . self::PRE[1]
-            . self::LINEBREAK
-            . self::LINEBREAK;
     }
 
     /**
@@ -57,21 +96,23 @@ class Debug
      * @param string $title
      * @param string $titleColor
      */
-    public static function pd($var, $title = '', $titleColor = '#c22')
+    public function pd($var, $title = '', $titleColor = '#c22')
     {
-        $var = self::determineOutput($var);
-        echo self::PRE[0];
+        if ($this->environment->getCurrent() <= $this->envMax) {
+            $var = self::determineOutput($var);
+            echo self::PRE[0];
 
-        if ($title !== '') {
-            echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
+            if ($title !== '') {
+                echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
+            }
+
+            echo $var
+                . self::PRE[1]
+                . $this->linebreak
+                . $this->linebreak;
+
+            self::ks();
         }
-
-        echo $var
-            . self::PRE[1]
-            . self::LINEBREAK
-            . self::LINEBREAK;
-
-        self::ks();
     }
 
     /**
@@ -81,18 +122,20 @@ class Debug
      * @param string $title
      * @param string $titleColor
      */
-    public static function vd($var, $title = '', $titleColor = '#c22')
+    public function vd($var, $title = '', $titleColor = '#c22')
     {
-        echo self::PRE[0];
+        if ($this->environment->getCurrent() <= $this->envMax) {
+            echo self::PRE[0];
 
-        if ($title !== '') {
-            echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
+            if ($title !== '') {
+                echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
+            }
+
+            var_dump($var);
+            echo self::PRE[1]
+                . $this->linebreak
+                . $this->linebreak;
         }
-
-        var_dump($var);
-        echo self::PRE[1]
-            . self::LINEBREAK
-            . self::LINEBREAK;
     }
 
     /**
@@ -102,50 +145,54 @@ class Debug
      * @param string $title
      * @param string $titleColor
      */
-    public static function vdd($var, $title = '', $titleColor = '#c22')
+    public function vdd($var, $title = '', $titleColor = '#c22')
     {
-        echo self::PRE[0];
+        if ($this->environment->getCurrent() <= $this->envMax) {
+            echo self::PRE[0];
 
-        if ($title !== '') {
-            echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
+            if ($title !== '') {
+                echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
+            }
+
+            var_dump($var);
+            echo self::PRE[1]
+                . $this->linebreak
+                . $this->linebreak;
+
+            self::ks();
         }
-
-        var_dump($var);
-        echo self::PRE[1]
-            . self::LINEBREAK
-            . self::LINEBREAK;
-
-        self::ks();
     }
 
     /**
      * Prints memory usage for current script.
      */
-    public static function memory()
+    public function memory()
     {
         echo 'Memory Usage: ' . round((memory_get_usage() / 1024), 2) . 'kb / Real: ' . round((memory_get_usage(true) / 1024),
-                2) . 'kb' . self::LINEBREAK;
+                2) . 'kb' . $this->linebreak;
         echo 'Peak Usage: ' . round((memory_get_peak_usage() / 1024), 2) . 'kb / Real: ' . round((memory_get_peak_usage(true) / 1024),
-                2) . 'kb' . self::LINEBREAK;
+                2) . 'kb' . $this->linebreak;
     }
 
     /**
      * Prints execution time for current script.
      */
-    public static function execTime()
+    public function execTime()
     {
-        echo 'Execution time: ' . round(((microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']) * 1000), 2) . 'ms' . self::LINEBREAK;
+        echo 'Execution time: ' . round(((microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']) * 1000), 2) . 'ms' . self::$linebreak;
     }
 
     /**
      * Displays both execution time and memory usage for current script.
      */
-    public static function stats()
+    public function stats()
     {
-        echo '<div style="position:fixed; bottom:0; right:0; font-family:Consolas,monospace; font-size:12px;">';
-        self::execTime();
-        self::memory();
-        echo '</div>';
+        if ($this->environment->getCurrent() <= $this->envMax) {
+            echo '<div style="position:fixed; bottom:0; right:0; font-family:Consolas,monospace; font-size:12px;">';
+            self::execTime();
+            self::memory();
+            echo '</div>';
+        }
     }
 
     /**
@@ -155,7 +202,7 @@ class Debug
      *
      * @return string
      */
-    public static function determineOutput($var)
+    public function determineOutput($var)
     {
         if (is_array($var)) {
             return print_r($var, true);
