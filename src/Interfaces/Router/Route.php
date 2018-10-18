@@ -13,11 +13,10 @@ interface Route
     /**
      * @param  Uri    $uri
      * @param  string $applicationName
-     * @param  bool   $isApi
      *
      * @return mixed
      */
-    public function go(Uri $uri, string $applicationName, bool $isApi);
+    public function go(Uri $uri, string $applicationName);
 
     /**
      * @param  string $controller

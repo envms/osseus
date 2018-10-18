@@ -3,8 +3,9 @@
 namespace Envms\Osseus\Router;
 
 use Envms\Osseus\Interfaces\Router\Route as RouteInterface;
-use Envms\Osseus\Parse\Uri;
 use Envms\Osseus\Exception\NotFound;
+use Envms\Osseus\Parse\Uri;
+use Envms\Osseus\Security\Validate;
 
 /**
  * Class Route
@@ -30,49 +31,25 @@ class Route implements RouteInterface
      *
      * @param  Uri    $uri
      * @param  string $applicationName - The base applicationName's namespace
-     * @param  bool   $isApi
+     *
+     * @throws NotFound
      *
      * @return mixed
-     *
-     * @todo Implement options functionality
      */
-    public function go(Uri $uri, string $applicationName, bool $isApi)
+    public function go(Uri $uri, string $applicationName)
     {
-        $action = 'index';
-        $params = [];
-        $options = null;
+        $controller = "{$applicationName}\\{$uri->getModule()}\Controller";
+        $action = $uri->getAction();
 
-        if ($isApi === true) {
-            $controller = $applicationName . '\Api\\' . $uri->getNamespace() . '\Controller';
+        $validate = new Validate($action);
 
-            if ($uri->getParams() !== null) {
-                $action = 'select';
-            }
-
-            return $this->trigger($controller, $action, $uri->getParams(), $uri->getOptions());
-        } else {
-            $controller = $applicationName . '\\' . $uri->getController() . '\Controller';
-            $action = $uri->getAction();
-
-            if (!empty($url[2])) {
-                $key = '';
-                $isKey = true;
-
-                // iterate through each parameter given to assign key value pairs
-                foreach ($url as $u) {
-                    if ($isKey) {
-                        $key = $u;
-                        $isKey = false;
-                    } else {
-                        $params[$key] = $u;
-                        $isKey = true;
-                    }
-                }
-            }
-
-            // attempt to instantiate the proper controller and call the requested method via the Request class
-            return $this->trigger($controller, $action, $params, $options);
+        if ($validate->integer()) {
+            $uri->addParam($action, true);
+            $action = 'get';
         }
+
+        // attempt to instantiate the proper controller and call the requested method via the Request class
+        return $this->trigger($controller, $action, $uri->getParams(), $uri->getOptions());
     }
 
     /**
