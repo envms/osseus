@@ -12,11 +12,6 @@ use Envms\Osseus\Dev\Debug;
 abstract class Exception extends \Exception
 {
     /** @var string */
-    private $string;
-    /** @var string */
-    private $trace;
-
-    /** @var string */
     protected $message = 'Default \Envms\Osseus\Exception';
 
     /**
@@ -31,6 +26,7 @@ abstract class Exception extends \Exception
         if ($message === null) {
             throw new $this(get_class($this));
         }
+
         parent::__construct($message, $code, $previous);
     }
 
@@ -39,7 +35,8 @@ abstract class Exception extends \Exception
      */
     public function __toString()
     {
-        return get_class($this) . ": {$this->message} ({$this->code}) in {$this->file} line {$this->line}" . Debug::LINEBREAK . "{$this->getTraceAsString()}";
+        $debug = Debug::instance();
+        return get_class($this) . ": {$this->message} ({$this->code}){$debug->linebreak}in {$this->file} line {$this->line}{$debug->linebreak}{$this->getTraceAsString()}";
     }
 
 }
