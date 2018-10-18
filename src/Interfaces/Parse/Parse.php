@@ -10,14 +10,14 @@ interface Parse
 
     /**
      * @param $input
-     * @param $options
+     * @param $flags
      */
-    public function read($input, $options);
+    public function read($input, $flags);
 
     /**
      * @param $input
-     * @param $options
+     * @param $flags
      */
-    public function write($input, $options);
+    public function write($input, $flags);
 
 }
