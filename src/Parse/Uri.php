@@ -224,7 +224,7 @@ class Uri implements Parse
                     $kv = explode('=', $this->uri['query']);
                     $this->options[$kv[0]] = $kv[1];
                 } else { // otherwise query is just a flat string
-                    $this->options = $this->uri['query'];
+                    $this->options[$this->uri['query']] = $this->uri['query'];
                 }
             }
         }
