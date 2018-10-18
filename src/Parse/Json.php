@@ -44,7 +44,7 @@ class Json implements Parse
             $error['code'] = json_last_error();
             $error['message'] = json_last_error_msg();
 
-            throw new Invalid('Unable to decode JSON string');
+            throw new Invalid('Unable to decode JSON string. Invalid JSON');
         }
     }
 
@@ -73,7 +73,7 @@ class Json implements Parse
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getError()
     {
@@ -81,12 +81,14 @@ class Json implements Parse
     }
 
     /**
-     * Parses the env.input file
+     * Parses the env.json file
      *
      * @param string $path
      * @param string $file
+     *
+     * @throws Invalid
      */
-    public function parseEnv(string $path, string $file = 'env.input')
+    public function parseEnv(string $path, string $file = 'env.json')
     {
         $this->read(file_get_contents($path . $file));
     }
