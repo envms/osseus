@@ -26,6 +26,6 @@ interface Route
      *
      * @return mixed
      */
-    public function trigger(string $controller, string $action, array $params, $options);
+    public function generate(string $controller, string $action, array $params, $options);
 
 }

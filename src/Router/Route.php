@@ -49,7 +49,7 @@ class Route implements RouteInterface
         }
 
         // attempt to instantiate the proper controller and call the requested method via the Request class
-        return $this->trigger($controller, $action, $uri->getParams(), $uri->getOptions());
+        return $this->generate($controller, $action, $uri->getParams(), $uri->getOptions());
     }
 
     /**
@@ -65,7 +65,7 @@ class Route implements RouteInterface
      * @return mixed
      */
 
-    public function trigger(string $controller, string $action, array $params, $options)
+    public function generate(string $controller, string $action, array $params, $options)
     {
         // check if the requested controller has been already instantiated
         if (!isset($this->instance[$controller])) {
