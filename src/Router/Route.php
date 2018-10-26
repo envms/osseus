@@ -74,7 +74,7 @@ class Route implements RouteInterface
                 throw new DoesNotExist('Controller class not found');
             }
 
-            $this->instance[$controller] = new $controller($params, $options);
+            $this->instance[$controller] = new $controller($params, $options, $_POST);
         }
 
         // check if controller method can be called
