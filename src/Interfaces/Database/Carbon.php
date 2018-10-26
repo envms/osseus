@@ -14,11 +14,20 @@ interface Carbon
 {
 
     /**
+     * @param int $id
+     *
+     * @return array|object
+     */
+    public function one(int $id);
+
+    /**
      * @param int    $offset
      * @param int    $limit
      * @param string $order
      * @param string $group
+     *
+     * @return array|object
      */
-    public function all(int $offset, int $limit, string $order, string $group);
+    public function many(int $offset, int $limit, string $order, string $group);
 
 }
