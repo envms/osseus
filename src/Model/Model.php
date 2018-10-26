@@ -11,7 +11,6 @@ use Envms\Osseus\Interfaces\Model\Model as ModelInterface;
  */
 class Model implements ModelInterface
 {
-
     /** @var int */
     public $id = null;
     /** @var array */
@@ -25,7 +24,7 @@ class Model implements ModelInterface
     public function __construct(array $data)
     {
         if (isset($data['id'])) {
-            $this->id = (int)$data['id']; // typecasting here prevents "valid" string integers like 012, converting it to 12 instead
+            $this->id = (int)$data['id']; // typecasting here prevents "valid" string integers - eg. 012 -> 12
             unset($data['id']);
             $this->data = $data;
         }
@@ -73,5 +72,4 @@ class Model implements ModelInterface
     {
         return isset($this->data[$key]) ? $this->data[$key] : false;
     }
-
 }
