@@ -6,8 +6,6 @@ namespace Envms\Osseus\I18n;
  * Class I18n
  *
  * Manages internationalization of static and complex string arrangements within the application
- *
- * @todo Implement SplFixedArray to improve performance and memory usage
  */
 class I18n
 {
@@ -16,7 +14,17 @@ class I18n
     /** @var array  - Complex and variable sentences which require parsing */
     protected $complex = [];
 
-    /** @var array  - Complex and variable sentences which require parsing */
+    /**
+     * I18n constructor
+     *
+     * @param array $phrases
+     * @param array $complex
+     */
+    public function __construct(array $phrases, array $complex)
+    {
+        $this->addPhrases($phrases);
+        $this->addComplex($complex);
+    }
 
     /**
      * @param  array $data
