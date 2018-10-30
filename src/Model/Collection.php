@@ -11,8 +11,16 @@ use Envms\Osseus\Interfaces\Model\Collection as CollectionInterface;
  */
 class Collection implements CollectionInterface
 {
+    /** @var int */
+    private $position;
 
+    /** @var array */
     protected $models = [];
+
+    public function __construct()
+    {
+        $this->position = 0;
+    }
 
     /**
      * @param int $id
@@ -48,4 +56,48 @@ class Collection implements CollectionInterface
         return $this->models;
     }
 
+    public function rewind()
+    {
+        $this->position = 0;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function current()
+    {
+        return $this->models[$this->position];
+    }
+
+    /**
+     * @return int
+     */
+    public function key()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @return mixed|void
+     */
+    public function next()
+    {
+        ++$this->position;
+    }
+
+    /**
+     * @return mixed|void
+     */
+    public function previous()
+    {
+        --$this->position;
+    }
+
+    /**
+     * @return bool
+     */
+    public function valid()
+    {
+        return isset($this->models[$this->position]);
+    }
 }
