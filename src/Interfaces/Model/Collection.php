@@ -7,7 +7,7 @@ use Envms\Osseus\Model\Model;
 /**
  * Interface Collection
  */
-interface Collection
+interface Collection extends \Iterator
 {
 
     /**

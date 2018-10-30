@@ -8,8 +8,6 @@ use Envms\Osseus\Interfaces\Model\Collection as CollectionInterface;
  * Class Collection
  *
  * Manages an array of models
- *
- * @todo Implement \Iterator for simplified data access
  */
 class Collection implements CollectionInterface
 {
