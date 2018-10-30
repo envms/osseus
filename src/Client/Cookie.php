@@ -19,10 +19,10 @@ class Cookie
     protected $path;
     /** @var string */
     protected $domain;
-    /** @var bool */
-    protected $secure;
-    /** @var bool */
-    protected $httponly;
+    /** @var bool - Leave this on unless the domain does not implement site-wide https */
+    protected $secure = true;
+    /** @var bool - Should always be on unless a specific cookie needs to be accessible by the client */
+    protected $httponly = true;
 
     /**
      * @param Sanitize $sanitize
@@ -34,8 +34,6 @@ class Cookie
         $this->sanitize = $sanitize;
         $this->path = $path;
         $this->domain = $domain;
-        $this->secure = $secure;
-        $this->httponly = $httponly;
     }
 
     /**
@@ -98,7 +96,19 @@ class Cookie
         return $_COOKIE[$this->sanitize->word($name)->getSanitized()];
     }
 
-        return $_COOKIE[$sanitize->word()->getSanitized()];
+    /**
+     * @param bool $flag
+     */
+    public function secureOnly(bool $flag)
+    {
+        $this->secure = $flag;
     }
 
+    /**
+     * @param bool $flag
+     */
+    public function httpOnly(bool $flag)
+    {
+        $this->httponly = $flag;
+    }
 }
