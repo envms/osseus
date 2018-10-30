@@ -1,10 +1,9 @@
 # Osseus Framework
 
-#### Current version is alpha-2 (v0.1.0)
+#### Current version is beta-1 (v0.3.0)
 
-Osseus is a light and tiny PHP framework and toolbox. Its goal is to be flexible and impartial to code and database structures.
-
-The plan for this is to also be able to interface with FluentPDO 2.0 and provide quick and seamless database interactions.
+Osseus is a light and tiny PHP framework and toolbox. Its goal is to be flexible and impartial to code and database
+structures. It interfaces with FluentPDO 2.0 to provide quick and seamless database interactions.
 
 Osseus can be used as a standard application framework or simply as a utility library.
 
@@ -16,7 +15,26 @@ Osseus can be used as a standard application framework or simply as a utility li
 - classic MVC system with some small additions
 
 ### Contributions
-Contributors are more than welcome to help test and improve Env
+Contributors are more than welcome to help test and improve Osseus
 
-### Looking forward to 'alpha-3' (v0.2.0)
-- Flesh out `Carbon` interface and class
+### Usage
+
+To get started, all you need is a little setup:
+
+```php
+// add necessary classes
+use Envms\Osseus\Parse\Uri;
+use Envms\Osseus\Router\Route;
+use Envms\Osseus\Server\Environment;
+
+// set your environment
+$environment = Environment::instance();
+$environment->init(Environment::DEVELOPMENT);
+
+// parse the URI and route to a controller
+$uri = new Uri($_SERVER['REQUEST_URI']);
+$router = new Route('TestApp');
+$router->go($uri);
+```
+
+The router will direct the `$uri` to your application's controller and action, and you're on your way! Documentation is coming soon.
