@@ -12,7 +12,6 @@ use Envms\Osseus\Utils\Regex;
  */
 class Sanitize
 {
-
     /** @var mixed - Retains the original form of the data for comparison */
     protected $original;
     /** @var mixed */
@@ -23,34 +22,38 @@ class Sanitize
     /**
      * @param $data
      */
-    public function __construct($data)
+    public function __construct($data = '')
     {
         $this->sanitized = $this->original = $data;
         $this->regex = new Regex($this->sanitized);
     }
 
     /**
-     * Set internal data to a new value.
+     * Set internal data to a new value
      *
-     * @param  $data
+     * @param $data
      *
      * @return $this
      */
     public function reset($data)
     {
-        $this->sanitized = $this->original = $data;
-        $this->regex->reset($this->sanitized);
+        if ($data !== null) {
+            $this->sanitized = $this->original = $data;
+            $this->regex->reset($this->sanitized);
+        }
 
         return $this;
     }
 
     /**
+     * @param mixed $data
      * @param int $flags
      *
-     * @return Sanitize
+     * @return $this
      */
-    public function html($flags = ENT_COMPAT | ENT_HTML5)
+    public function html($data = null, $flags = ENT_COMPAT | ENT_HTML5)
     {
+        $this->reset($data);
         $this->sanitized = htmlspecialchars($this->sanitized, $flags);
 
         return $this;
@@ -60,20 +63,26 @@ class Sanitize
      * A basic method to escape all SQL special characters. This should rarely ever need to be used,
      * and instead use PDO prepared statements
      *
-     * @return Sanitize
+     * @param mixed $data
+     *
+     * @return $this
      */
-    public function sql()
+    public function sql($data = null)
     {
+        $this->reset($data);
         $this->sanitized = addcslashes($this->sanitized, "\"'`;_%\\\0\r\n");
 
         return $this;
     }
 
     /**
-     * @return Sanitize
+     * @param mixed $data
+     *
+     * @return $this
      */
-    public function integer()
+    public function integer($data = null)
     {
+        $this->reset($data);
         $nf = new \NumberFormatter('en_US', \NumberFormatter::DECIMAL);
         $this->sanitized = intval($nf->parse($this->sanitized));
 
@@ -81,10 +90,13 @@ class Sanitize
     }
 
     /**
-     * @return Sanitize
+     * @param mixed $data
+     *
+     * @return $this
      */
-    public function float()
+    public function float($data = null)
     {
+        $this->reset($data);
         $nf = new \NumberFormatter('en_US', \NumberFormatter::DECIMAL);
         $this->sanitized = $nf->parse($this->sanitized);
 
@@ -94,10 +106,13 @@ class Sanitize
     /**
      * Remove any characters that are not alphabetical
      *
-     * @return Sanitize
+     * @param mixed $data
+     *
+     * @return $this
      */
-    public function alpha()
+    public function alpha($data = null)
     {
+        $this->reset($data);
         $this->sanitized = $this->regex->replace(Regex::NOT_ALPHA);
 
         return $this;
@@ -106,10 +121,13 @@ class Sanitize
     /**
      * Remove any characters that are not alphanumeric
      *
-     * @return Sanitize
+     * @param mixed $data
+     *
+     * @return $this
      */
-    public function alnum()
+    public function alnum($data = null)
     {
+        $this->reset($data);
         $this->sanitized = $this->regex->replace(Regex::NOT_ALNUM);
 
         return $this;
@@ -118,10 +136,13 @@ class Sanitize
     /**
      * Remove any characters that are not hexadecimal
      *
-     * @return Sanitize
+     * @param mixed $data
+     *
+     * @return $this
      */
-    public function hex()
+    public function hex($data = null)
     {
+        $this->reset($data);
         $this->sanitized = $this->regex->replace(Regex::NOT_HEX);
 
         return $this;
@@ -130,10 +151,13 @@ class Sanitize
     /**
      * Remove any characters that are not numeric
      *
-     * @return Sanitize
+     * @param mixed $data
+     *
+     * @return $this
      */
-    public function numeric()
+    public function numeric($data = null)
     {
+        $this->reset($data);
         $this->sanitized = $this->regex->replace(Regex::NOT_NUM);
 
         return $this;
@@ -142,10 +166,13 @@ class Sanitize
     /**
      * Remove any characters that are not a combination of letters, numbers or underscores
      *
-     * @return Sanitize
+     * @param mixed $data
+     *
+     * @return $this
      */
-    public function word()
+    public function word($data = null)
     {
+        $this->reset($data);
         $this->sanitized = $this->regex->replace(Regex::NOT_WORD);
 
         return $this;
@@ -170,5 +197,4 @@ class Sanitize
     {
         return $this->sanitized;
     }
-
 }
