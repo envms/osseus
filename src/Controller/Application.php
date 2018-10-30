@@ -7,7 +7,7 @@ use Envms\Osseus\Interfaces\Controller\Controller;
 /**
  * Class Application
  */
-class Application implements Controller
+abstract class Application implements Controller
 {
     /** @var array $params */
     protected $params = [];
@@ -28,10 +28,5 @@ class Application implements Controller
         $this->params = $params;
         $this->options = $options;
         $this->form = $form;
-    }
-
-    public function index()
-    {
-
     }
 }
