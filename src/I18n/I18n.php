@@ -11,32 +11,43 @@ namespace Envms\Osseus\I18n;
  */
 class I18n
 {
-
-    protected $phrases = [];
     /** @var array  - Static sentences and phrases */
+    protected $phrases = [];
+    /** @var array  - Complex and variable sentences which require parsing */
     protected $complex = [];
 
     /** @var array  - Complex and variable sentences which require parsing */
 
-    public function __construct()
+    /**
+     * @param  array $data
+     * @param  bool  $preserve - If true, the arrays will merge with the current data, overwriting keys when required.
+     *
+     * @return bool
+     */
+    public function addPhrases(array $data, $preserve = false): bool
     {
+        if (!is_array($data)) {
+            return false;
+        }
 
+        $this->phrases = (!$preserve) ? array_merge($this->phrases, $data) : array_merge($data, $this->phrases);
+
+        return true;
     }
 
     /**
      * @param  array $data
-     * @param  bool  $preserve - If true, the arrays will merge with the current data, overwriting when required.
+     * @param  bool  $preserve - If true, the arrays will merge with the current data, overwriting keys when required.
      *
      * @return bool
      */
-    public function add(array $data, $preserve = false)
+    public function addComplex(array $data, $preserve = false): bool
     {
-        if (!is_array($data['phrases']) || !is_array($data['complex'])) {
+        if (!is_array($data)) {
             return false;
         }
 
-        $this->phrases = (!$preserve) ? array_merge($this->phrases, $data['phrases']) : array_merge($data['phrases'], $this->phrases);
-        $this->complex = (!$preserve) ? array_merge($this->complex, $data['complex']) : array_merge($data['complex'], $this->complex);
+        $this->complex = (!$preserve) ? array_merge($this->complex, $data) : array_merge($data, $this->complex);
 
         return true;
     }
