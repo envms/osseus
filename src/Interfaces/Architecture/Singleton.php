@@ -7,11 +7,9 @@ namespace Envms\Osseus\Interfaces\Architecture;
  */
 interface Singleton
 {
+    public static function instance();
 
-    static function instance();
+    public function __sleep();
 
-    function __sleep();
-
-    function __wakeup();
-
+    public function __wakeup();
 }
