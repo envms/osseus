@@ -212,18 +212,19 @@ class Uri implements Parse
         if (!empty($this->uri['query'])) {
             if (strpos($this->uri['query'], '&') !== false) { // check for multiple options, split by &
                 $options = explode('&', $this->uri['query']);
+
                 foreach ($options as $option) {
                     if (strpos($option, '=') !== false) { // check for a key-value pair, split by =
-                        $kv = explode('=', $option);
-                        $this->options[$kv[0]] = $kv[1];
+                        $keyValues = explode('=', $option);
+                        $this->options[$keyValues[0]] = $keyValues[1];
                     } else { // otherwise set the key to the value
                         $this->options[$option] = $option;
                     }
                 }
             } else { // if there are no multiple options, check for a key-value pair, split by =
                 if (strpos($this->uri['query'], '=') !== false) {
-                    $kv = explode('=', $this->uri['query']);
-                    $this->options[$kv[0]] = $kv[1];
+                    $keyValues = explode('=', $this->uri['query']);
+                    $this->options[$keyValues[0]] = $keyValues[1];
                 } else { // otherwise query is just a flat string
                     $this->options[$this->uri['query']] = $this->uri['query'];
                 }
