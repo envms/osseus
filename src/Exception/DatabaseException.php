@@ -8,7 +8,7 @@ namespace Envms\Osseus\Exception;
  * Base exception class for "database" exceptions. Can be extended to include exceptions
  * to database connection, query etc.
  */
-class Database extends Exception
+class DatabaseException extends Exception
 {
 
 }

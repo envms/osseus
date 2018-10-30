@@ -8,7 +8,7 @@ namespace Envms\Osseus\Exception;
  * Base exception class for "invalid" exceptions. Can be extended to include exceptions
  * to invalid argument, data type etc.
  */
-class Invalid extends Exception
+class InvalidException extends Exception
 {
 
 }

@@ -7,7 +7,7 @@ namespace Envms\Osseus\Exception;
  *
  * Base exception class for "not found" exceptions. Commonly used for files or URLs that are not found or accessible
  */
-class NotFound extends Exception
+class NotFoundException extends Exception
 {
 
 }
