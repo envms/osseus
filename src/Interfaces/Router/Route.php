@@ -9,14 +9,12 @@ use Envms\Osseus\Parse\Uri;
  */
 interface Route
 {
-
     /**
-     * @param  Uri    $uri
-     * @param  string $applicationName
+     * @param Uri $uri
      *
      * @return mixed
      */
-    public function go(Uri $uri, string $applicationName);
+    public function go(Uri $uri);
 
     /**
      * @param  string $controller
@@ -27,5 +25,4 @@ interface Route
      * @return mixed
      */
     public function generate(string $controller, string $action, array $params, $options);
-
 }

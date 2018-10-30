@@ -36,7 +36,7 @@ class Route implements RouteInterface
      *
      * @return mixed
      */
-    public function go(Uri $uri, string $applicationName)
+    public function go(Uri $uri)
     {
         $controller = "{$applicationName}\\{$uri->getModule()}\\Controller";
         $action = $uri->getAction();
