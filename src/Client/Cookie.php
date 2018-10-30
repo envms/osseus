@@ -13,7 +13,8 @@ use Envms\Osseus\Security\Sanitize;
  */
 class Cookie
 {
-
+    /** @var Sanitize */
+    protected $sanitize;
     /** @var string */
     protected $path;
     /** @var string */
@@ -24,13 +25,13 @@ class Cookie
     protected $httponly;
 
     /**
-     * @param string $domain   - Can be set to a wildcard or subdomain.
-     * @param string $path
-     * @param bool   $secure   - Leave this on unless the domain does not implement site-wide https
-     * @param bool   $httponly - Should always be on unless a specific cookie needs to be accessible by the client
+     * @param Sanitize $sanitize
+     * @param string   $domain - Can be set to a wildcard or subdomain
+     * @param string   $path
      */
-    public function __construct($domain = '', $path = '/', $secure = true, $httponly = true)
+    public function __construct(Sanitize $sanitize, string $domain = '', string $path = '/')
     {
+        $this->sanitize = $sanitize;
         $this->path = $path;
         $this->domain = $domain;
         $this->secure = $secure;
@@ -49,9 +50,8 @@ class Cookie
 
     public function assign(string $name, $value, int $expire = 7776000)
     {
-        $sanitize = new Sanitize($name);
-        $name = $sanitize->word()->getSanitized();
-        $value = $sanitize->reset($value)->html()->getSanitized();
+        $name = $this->sanitize->word($name)->getSanitized();
+        $value = $this->sanitize->html($value)->getSanitized();
 
         return setcookie($name, $value, $expire, $this->path, $this->domain, $this->secure, $this->httponly);
     }
@@ -68,8 +68,7 @@ class Cookie
 
     public function rawAssign(string $name, $value, int $expire = 7776000)
     {
-        $sanitize = new Sanitize($name);
-        $name = $sanitize->word()->getSanitized();
+        $name = $this->sanitize->word($name)->getSanitized();
 
         return setrawcookie($name, $value, $expire, $this->path, $this->domain, $this->secure, $this->httponly);
     }
@@ -96,7 +95,8 @@ class Cookie
 
     public function get($name)
     {
-        $sanitize = new Sanitize($name);
+        return $_COOKIE[$this->sanitize->word($name)->getSanitized()];
+    }
 
         return $_COOKIE[$sanitize->word()->getSanitized()];
     }
