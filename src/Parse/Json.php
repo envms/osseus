@@ -3,7 +3,7 @@
 namespace Envms\Osseus\Parse;
 
 use Envms\Osseus\Interfaces\Parse\Parse;
-use Envms\Osseus\Exception\Invalid;
+use Envms\Osseus\Exception\InvalidException;
 
 /**
  * Class Json
@@ -26,7 +26,7 @@ class Json implements Parse
      * @param string $input
      * @param array  $flags
      *
-     * @throws Invalid
+     * @throws InvalidException
      *
      * @return array
      */
@@ -39,7 +39,7 @@ class Json implements Parse
             $error['code'] = json_last_error();
             $error['message'] = json_last_error_msg();
 
-            throw new Invalid('Unable to decode JSON string. Invalid JSON');
+            throw new InvalidException('Unable to decode JSON string. Invalid JSON');
         }
 
         return $this->parsedData;
@@ -51,7 +51,7 @@ class Json implements Parse
      * @param mixed $input
      * @param array $flags
      *
-     * @throws Invalid
+     * @throws InvalidException
      *
      * @return string
      */
@@ -64,7 +64,7 @@ class Json implements Parse
             $error['code'] = json_last_error();
             $error['message'] = json_last_error_msg();
 
-            throw new Invalid('Unable to encode input to string');
+            throw new InvalidException('Unable to encode input to string');
         }
 
         return $this->rawData;
@@ -84,7 +84,7 @@ class Json implements Parse
      * @param string $path
      * @param string $file
      *
-     * @throws Invalid
+     * @throws InvalidException
      */
     public function parseEnv(string $path, string $file = 'env.json')
     {
