@@ -44,7 +44,8 @@ class Route implements RouteInterface
      */
     public function go(Uri $uri)
     {
-        $controller = "{$applicationName}\\{$uri->getModule()}\\Controller";
+        $component = $uri->getComponent();
+        $controller = "{$this->applicationName}{$component}\\Controller";
         $action = $uri->getAction();
 
         $validate = new Validate($action);
@@ -54,8 +55,10 @@ class Route implements RouteInterface
             $action = 'get';
         }
 
+        $params = $this->mapParams($component, $action, $uri->getParams());
+
         // attempt to instantiate the proper controller and call the requested method via the Request class
-        return $this->generate($controller, $action, $uri->getParams(), $uri->getOptions());
+        return $this->generate($controller, $action, $params, $uri->getOptions());
     }
 
     /**
@@ -92,4 +95,26 @@ class Route implements RouteInterface
         return $this->instance[$controller]->$action();
     }
 
+    /**
+     * @param string $controller
+     * @param string $action
+     * @param array $params
+     *
+     * @throws InvalidException
+     *
+     * @return array
+     */
+    public function mapParams(string $controller, string $action, array $params): array
+    {
+        if (isset($this->map[$controller][$action])) {
+            $map = $this->map[$controller][$action];
+            if (count($map) === count($params)) {
+                return array_combine($map, $params);
+            } else {
+                throw new InvalidException('URL and Route parameter count must be equal');
+            }
+        }
+
+        return $params;
+    }
 }
