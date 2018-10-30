@@ -2,7 +2,7 @@
 
 namespace Envms\Osseus\Client;
 
-use Envms\Osseus\Security\{Cipher, Hash};
+use Envms\Osseus\Security\{Cipher, Hash, Sanitize};
 use Envms\Osseus\Utils\Net;
 /**
  * Class Session
@@ -11,7 +11,6 @@ use Envms\Osseus\Utils\Net;
  */
 class Session extends \SessionHandler
 {
-
     /** @var string|null */
     protected $name;
 
@@ -53,7 +52,8 @@ class Session extends \SessionHandler
             }
         }
 
-        $this->set('cipher:nonce', $this->cipher->setNonce($this->get('cipher:nonce'))); // if a nonce exists within the current session, use it
+        // if a nonce exists within the current session, use it
+        $this->set('cipher:nonce', $this->cipher->setNonce($this->get('cipher:nonce')));
 
         return $started;
     }
@@ -69,8 +69,11 @@ class Session extends \SessionHandler
 
         $_SESSION = [];
 
-        $cookie = new Cookie(); // we have to remove any data attached to the session cookie
-        $cookie->assign($this->name, 0, (time() - 60 * 60 * 24 * 30)); // 1 month earlier to ensure session cookie deletion
+        $sanitize = new Sanitize();
+        $cookie = new Cookie($sanitize); // we have to remove any data attached to the session cookie
+
+        // 1 month earlier to ensure session cookie deletion
+        $cookie->assign($this->name, 0, (time() - 60 * 60 * 24 * 30));
 
         return session_destroy();
     }
@@ -204,5 +207,4 @@ class Session extends \SessionHandler
 
         return $sessionValue;
     }
-
 }
