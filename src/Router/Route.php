@@ -14,16 +14,23 @@ use Envms\Osseus\Security\Validate;
  */
 class Route implements RouteInterface
 {
-
     /** @var array - Holds each controller instance */
     protected $instance = [];
+    /** @var array */
+    protected $map;
+    /** @var string */
+    protected $applicationName;
 
     /**
      * Route constructor
+     *
+     * @param string $applicationName - The calling application's namespace
+     * @param array $map
      */
-    public function __construct()
+    public function __construct(string $applicationName = '', array $map = [])
     {
-
+        $this->applicationName = "{$applicationName}\\";
+        $this->map = $map;
     }
 
     /**
