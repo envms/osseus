@@ -7,7 +7,6 @@ namespace Envms\Osseus\Database;
  */
 class Table
 {
-
     /** @var string - Matches the database component name which precedes $divider */
     protected $component = '';
     /** @var string - Splits the component and table name. Defaults to empty string */
@@ -68,5 +67,4 @@ class Table
         $this->name = $name;
         $this->fullName = $this->component . $this->divider . $this->name;
     }
-
 }

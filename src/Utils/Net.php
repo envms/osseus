@@ -7,7 +7,6 @@ namespace Envms\Osseus\Utils;
  */
 class Net
 {
-
     /**
      * @param $address
      * @param $subnetMask
@@ -112,9 +111,8 @@ class Net
         }
 
         $addr = str_pad($addr, 32, '0');
-        $addr = pack("H*" , $addr);
+        $addr = pack("H*", $addr);
 
         return $addr;
     }
-
 }

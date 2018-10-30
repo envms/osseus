@@ -7,7 +7,6 @@ namespace Envms\Osseus\Database;
  */
 class Identifier
 {
-
     /** @var string */
     protected $primaryKey;
     /** @var string */
@@ -63,5 +62,4 @@ class Identifier
 
         return sprintf($key, $table);
     }
-
 }

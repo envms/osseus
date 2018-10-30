@@ -10,10 +10,8 @@ namespace Envms\Osseus\Interfaces\Exception;
  */
 interface Handler
 {
-
     /**
      * @param \Throwable $e
      */
     public static function get(\Throwable $e);
-
 }

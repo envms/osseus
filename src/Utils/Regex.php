@@ -7,7 +7,6 @@ namespace Envms\Osseus\Utils;
  */
 class Regex
 {
-
     /** Regex constants make use of POSIX character classes */
     const ALNUM = '[[:alnum:]]';
     const ALPHA = '[[:alpha:]]';
@@ -145,5 +144,4 @@ class Regex
     {
         return $this->subject;
     }
-
 }

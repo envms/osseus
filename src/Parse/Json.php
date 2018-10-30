@@ -12,7 +12,6 @@ use Envms\Osseus\Exception\Invalid;
  */
 class Json implements Parse
 {
-
     /** @var array */
     protected $error = ['code' => JSON_ERROR_NONE, 'message' => 'No error'];
 
@@ -91,5 +90,4 @@ class Json implements Parse
     {
         $this->read(file_get_contents($path . $file));
     }
-
 }

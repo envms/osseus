@@ -7,7 +7,5 @@ namespace Envms\Osseus\Interfaces\Controller;
  */
 interface Controller
 {
-
     public function index();
-
 }

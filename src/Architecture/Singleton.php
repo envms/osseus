@@ -13,7 +13,6 @@ use Envms\Osseus\Interfaces\Architecture\Singleton as SingletonInterface;
  */
 abstract class Singleton implements SingletonInterface
 {
-
     /** @var array */
     protected static $instances = [];
 
@@ -66,5 +65,4 @@ abstract class Singleton implements SingletonInterface
     {
         return false;
     }
-
 }

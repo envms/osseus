@@ -38,5 +38,4 @@ abstract class Exception extends \Exception
         $debug = Debug::instance();
         return get_class($this) . ": {$this->message} ({$this->code}){$debug->linebreak}in {$this->file} line {$this->line}{$debug->linebreak}{$this->getTraceAsString()}";
     }
-
 }

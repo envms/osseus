@@ -40,8 +40,8 @@ class Debug extends Singleton
     }
 
     /**
-     * @param int $envMax  - the maximum environment which would still output debug information. An example would be if this
-     *                       was set to STAGING, only production environments would NOT show debug info
+     * @param int $envMax  - the maximum environment which would still output debug information. An example
+     *                       would be if this was set to STAGING, only production environments would NOT show debug info
      * @param string $sapi - the current server API
      */
     public function init(int $envMax, string $sapi)

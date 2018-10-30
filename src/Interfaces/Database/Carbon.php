@@ -7,12 +7,9 @@ namespace Envms\Osseus\Interfaces\Database;
  *
  * Carbon acts as an intermediary between the database and model/collections. In the Env Framework, the model
  * does not care how or where it's getting its data from, only about storing and managing the data.
- *
- * @todo Refactor interface to include methods offset, limit, order and group, and not manage with all() method
  */
 interface Carbon
 {
-
     /**
      * @param int $id
      *
@@ -29,5 +26,4 @@ interface Carbon
      * @return array|object
      */
     public function many(int $offset, int $limit, string $order, string $group);
-
 }

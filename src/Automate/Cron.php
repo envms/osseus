@@ -9,7 +9,6 @@ namespace Envms\Osseus\Automate;
  */
 class Cron
 {
-
     /** @var mixed */
     protected $log;
 
@@ -48,5 +47,4 @@ class Cron
         $this->log->pushHandler($this->logHandler);
         $this->log->info($message);
     }
-
 }

@@ -7,7 +7,6 @@ namespace Envms\Osseus\Interfaces\Parse;
  */
 interface Parse
 {
-
     /**
      * @param $input
      * @param $flags
@@ -19,5 +18,4 @@ interface Parse
      * @param $flags
      */
     public function write($input, $flags);
-
 }

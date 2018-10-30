@@ -11,7 +11,6 @@ use Envms\Osseus\Utils\Regex;
  */
 class Hash
 {
-
     const GOST = 'gost';
     const MD5 = 'md5';
     const SHA1 = 'sha1';
@@ -67,5 +66,4 @@ class Hash
         // hash again with a little more salt added
         return hash($algorithm, $salt . $toHash);
     }
-
 }

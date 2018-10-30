@@ -108,5 +108,4 @@ class Cipher
 
         return $this->nonce;
     }
-
 }

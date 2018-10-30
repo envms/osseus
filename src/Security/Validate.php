@@ -13,7 +13,6 @@ use Envms\Osseus\Utils\Regex;
  */
 class Validate
 {
-
     /** @var array */
     protected $errors = [];
     /** @var mixed */
@@ -146,5 +145,4 @@ class Validate
     {
         return $this->regex->match(Regex::NOT_WORD);
     }
-
 }

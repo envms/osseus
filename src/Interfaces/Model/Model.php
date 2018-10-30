@@ -7,7 +7,6 @@ namespace Envms\Osseus\Interfaces\Model;
  */
 interface Model
 {
-
     /**
      * @param  string $key
      *
@@ -32,5 +31,4 @@ interface Model
      * @return mixed
      */
     public function __get(string $key);
-
 }
