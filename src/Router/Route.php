@@ -3,7 +3,7 @@
 namespace Envms\Osseus\Router;
 
 use Envms\Osseus\Interfaces\Router\Route as RouteInterface;
-use Envms\Osseus\Exception\DoesNotExist;
+use Envms\Osseus\Exception\{DoesNotExistException, InvalidException};
 use Envms\Osseus\Parse\Uri;
 use Envms\Osseus\Security\Validate;
 
@@ -37,9 +37,8 @@ class Route implements RouteInterface
      * For determining the appropriate actions to pass to go()
      *
      * @param  Uri    $uri
-     * @param  string $applicationName - The base applicationName's namespace
      *
-     * @throws DoesNotExist
+     * @throws DoesNotExistException|InvalidException
      *
      * @return mixed
      */
@@ -67,7 +66,7 @@ class Route implements RouteInterface
      * @param  array        $params
      * @param  array|string $options
      *
-     * @throws DoesNotExist
+     * @throws DoesNotExistException
      *
      * @return mixed
      */
@@ -78,7 +77,7 @@ class Route implements RouteInterface
         if (!isset($this->instance[$controller])) {
             // if not, try to instantiate the controller
             if (!class_exists($controller)) {
-                throw new DoesNotExist('Controller class not found');
+                throw new DoesNotExistException('Controller class not found');
             }
 
             $this->instance[$controller] = new $controller($params, $options, $_POST);
@@ -86,7 +85,7 @@ class Route implements RouteInterface
 
         // check if controller method can be called
         if (!is_callable([$this->instance[$controller], $action])) {
-            throw new DoesNotExist('Controller method not found');
+            throw new DoesNotExistException('Controller method not found');
         }
 
         // call method in requested controller and return output when applicable
