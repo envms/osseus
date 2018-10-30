@@ -61,34 +61,27 @@ class I18n
     }
 
     /**
-     * @param  string $key
+     * @param string $key
      *
      * @return null|string
      */
-    public function __get(string $key)
+    public function __get(string $key): ?string
     {
         return (isset($this->phrases[$key])) ? $this->phrases[$key] : null;
     }
 
     /**
-     * @param  string $key
-     * @param  mixed  $inserts
+     * @param string $key
+     * @param mixed  $inserts
      *
      * @return null|string
      */
-    public function get(string $key, ...$inserts)
+    public function get(string $key, ...$inserts): ?string
     {
         if (!array_key_exists($key, $this->complex)) {
             return null;
         }
 
-        $string = $this->complex[$key];
-
-        foreach ($inserts as $id => $replace) {
-            $string = str_replace('#/' . ++$id . '\#', $replace, $string);
-        }
-
-        return $string;
+        return vsprintf($this->complex[$key], $inserts);
     }
-
 }
