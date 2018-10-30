@@ -19,7 +19,7 @@ class Uri implements Parse
     /** @var array - contains API params */
     protected $api = [];
     /** @var string */
-    protected $module = '';
+    protected $component = '';
     /** @var string */
     protected $action = '';
     /** @var array */
@@ -46,7 +46,7 @@ class Uri implements Parse
 
             $route = $this->route;
 
-            $this->module = str_replace('-', '', ucwords(array_shift($route), '-'));
+            $this->component = str_replace('-', '', ucwords(array_shift($route), '-'));
             $this->action = lcfirst(str_replace('-', '', ucwords(array_shift($route), '-')));
             $this->params = $route;
 
@@ -148,9 +148,9 @@ class Uri implements Parse
     /**
      * @return string
      */
-    public function getModule()
+    public function getComponent()
     {
-        return $this->module;
+        return $this->component;
     }
 
     /**
@@ -190,7 +190,8 @@ class Uri implements Parse
     /**
      * @return bool
      */
-    public function isApiCall() {
+    public function isApiCall()
+    {
         return isset($this->api['version']);
     }
 
