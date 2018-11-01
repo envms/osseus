@@ -18,7 +18,7 @@ class Identifier
      * @param string $primaryKey
      * @param string $foreignKey
      */
-    public function __construct($primaryKey = 'id', $foreignKey = '%sId')
+    public function __construct($primaryKey = 'id', $foreignKey = '%s_id')
     {
         if ($foreignKey === null) {
             $foreignKey = $primaryKey;
