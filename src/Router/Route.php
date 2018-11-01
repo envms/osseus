@@ -19,7 +19,7 @@ class Route implements RouteInterface
     /** @var array */
     protected $map;
     /** @var string */
-    protected $applicationName;
+    protected $applicationDir;
 
     /**
      * Route constructor
@@ -29,7 +29,7 @@ class Route implements RouteInterface
      */
     public function __construct(string $applicationName = '', array $map = [])
     {
-        $this->applicationName = "{$applicationName}\\";
+        $this->applicationDir = "{$applicationName}\\Components\\";
         $this->map = $map;
     }
 
