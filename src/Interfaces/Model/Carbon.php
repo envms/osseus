@@ -1,6 +1,6 @@
 <?php
 
-namespace Envms\Osseus\Interfaces\Database;
+namespace Envms\Osseus\Interfaces\Model;
 
 /**
  * Interface Carbon
