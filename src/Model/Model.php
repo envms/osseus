@@ -72,4 +72,13 @@ abstract class Model implements ModelInterface
     {
         return isset($this->data[$key]) ? $this->data[$key] : false;
     }
+
+    /**
+     * @param string $key
+     * @param mixed  $value
+     */
+    protected function computed(string $key, $value)
+    {
+        $this->data[$key] = $value;
+    }
 }
