@@ -9,7 +9,7 @@ use Envms\Osseus\Interfaces\Model\Model as ModelInterface;
  *
  * A standard model structure for data storage
  */
-class Model implements ModelInterface
+abstract class Model implements ModelInterface
 {
     /** @var int */
     public $id = null;
@@ -17,7 +17,7 @@ class Model implements ModelInterface
     protected $data = [];
 
     /**
-     * Model()
+     * Model constructor
      *
      * @param array $data
      */

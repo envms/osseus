@@ -9,7 +9,7 @@ use Envms\Osseus\Interfaces\Model\Collection as CollectionInterface;
  *
  * Manages an array of models
  */
-class Collection implements CollectionInterface
+abstract class Collection implements CollectionInterface
 {
     /** @var int */
     private $position;
