@@ -3,6 +3,7 @@
 namespace Envms\Osseus\Controller;
 
 use Envms\Osseus\Interfaces\Controller\Controller;
+use Envms\Osseus\Interfaces\Model\Carbon;
 
 /**
  * Class Application
@@ -17,6 +18,9 @@ abstract class Application implements Controller
 
     /** @var array $form */
     protected $form = [];
+
+    /** @var Carbon */
+    protected $carbon;
 
     /**
      * @param array $params
