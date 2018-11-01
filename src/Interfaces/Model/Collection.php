@@ -23,9 +23,9 @@ interface Collection extends \Iterator
     public function __unset(int $id);
 
     /**
-     * @param Model $model
+     * @param array $data
      */
-    public function add(Model $model);
+    public function add(array $data);
 
     /**
      * @return mixed
