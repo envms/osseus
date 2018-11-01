@@ -171,4 +171,24 @@ class Validate
         $this->reset($data);
         return $this->regex->match(Regex::NOT_WORD);
     }
+
+    /**
+     * @param int   $minLength
+     * @param int   $maxLength
+     * @param mixed $data
+     *
+     * @return bool
+     */
+    public function length(int $minLength, int $maxLength, $data = null)
+    {
+        $this->reset($data);
+
+        if (is_array($this->data) || is_object($this->data)) {
+            $length = count($this->data);
+        } else {
+            $length = strlen((string)$this->data);
+        }
+
+        return ($length > $minLength) && ($length < $maxLength);
+    }
 }
