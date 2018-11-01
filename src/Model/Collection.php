@@ -17,9 +17,18 @@ abstract class Collection implements CollectionInterface
     /** @var array */
     protected $models = [];
 
+    /** @var string */
+    protected $modelName;
+
+    /**
+     * Collection constructor
+     *
+     * @throws \ReflectionException
+     */
     public function __construct()
     {
         $this->position = 0;
+        $this->modelName = $this->getModelName();
     }
 
     /**
@@ -38,14 +47,6 @@ abstract class Collection implements CollectionInterface
     public function __unset(int $id)
     {
         unset($this->models[$id]);
-    }
-
-    /**
-     * @param Model $model
-     */
-    public function add(Model $model)
-    {
-        $this->models[$model->id] = $model;
     }
 
     /**
