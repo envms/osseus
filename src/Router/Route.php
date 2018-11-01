@@ -44,25 +44,16 @@ class Route implements RouteInterface
      */
     public function go(Uri $uri)
     {
-        $component = $uri->getComponent();
-        $controller = "{$this->applicationName}{$component}\\Controller";
-        $action = $uri->getAction();
+        $controller = $this->determineController($uri->getComponent());
+        $action = $this->determineAction($uri->getAction(), $uri);
+        $params = $this->mapParams($uri->getComponent(), $action, $uri->getParams());
 
-        $validate = new Validate($action);
-
-        if ($validate->integer()) {
-            $uri->addParam($action, true);
-            $action = 'get';
-        }
-
-        $params = $this->mapParams($component, $action, $uri->getParams());
-
-        // attempt to instantiate the proper controller and call the requested method via the Request class
         return $this->generate($controller, $action, $params, $uri->getOptions());
     }
 
     /**
-     * Instantiates the proper controller with the requested method and parameters
+     * Instantiates the proper controller and attempts to call the requested
+     * method with parameters and options
      *
      * @param  string       $controller
      * @param  string       $action
@@ -93,6 +84,42 @@ class Route implements RouteInterface
 
         // call method in requested controller and return output when applicable
         return $this->instance[$controller]->$action();
+    }
+
+    /**
+     * @param $component
+     *
+     * @return string
+     */
+    public function determineController($component)
+    {
+        if (empty($component)) {
+            return "{$this->applicationDir}Index\\Controller";
+        }
+
+        return "{$this->applicationDir}{$component}\\Controller";
+    }
+
+    /**
+     * @param string $action
+     * @param Uri $uri
+     *
+     * @return string
+     */
+    public function determineAction($action, Uri $uri)
+    {
+        if (empty($action)) {
+            return 'index';
+        }
+
+        $validateAction = new Validate($action);
+
+        if ($validateAction->integer()) {
+            $uri->prependParam($action);
+            return 'get';
+        }
+
+        return $action;
     }
 
     /**
