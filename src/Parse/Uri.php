@@ -196,12 +196,19 @@ class Uri implements Parse
     }
 
     /**
-     * @param      $value
-     * @param bool $prepend
+     * @param $value
      */
-    public function addParam($value, bool $prepend = false)
+    public function addParam($value)
     {
-        ($prepend) ? array_unshift($this->params, $value) : array_push($this->params, $value);
+        array_push($this->params, $value);
+    }
+
+    /**
+     * @param $value
+     */
+    public function prependParam($value)
+    {
+        array_unshift($this->params, $value);
     }
 
     /**
