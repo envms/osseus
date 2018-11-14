@@ -79,10 +79,10 @@ abstract class Collection implements CollectionInterface
      */
     public function add(array $data): int
     {
-        $position = $this->count();
-        $this->models[$position] = new $this->modelName($data);
+        $id = (isset($data['id'])) ? $data['id'] : $this->count();
+        $this->models[$id] = new $this->modelName($data);
 
-        return $position;
+        return $id;
     }
 
     /**
