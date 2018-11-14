@@ -13,7 +13,6 @@ use Envms\Osseus\Server\Environment;
  */
 class Debug extends Singleton
 {
-
     /** @const - used to add ascii line breaks to printed data sets */
     protected const LINEBREAK_TEXT = "\r\n";
     /** @const - used to add html line breaks to printed data sets */
@@ -25,29 +24,20 @@ class Debug extends Singleton
 
     /** @var Environment */
     public $environment;
-
-    /** @var int */
+    /** @var int - the maximum environment which would still output debug information
+     *             Example: if set to STAGING, only production environments would NOT show debug data
+     */
     public $envMax;
     /** @var string */
     public $linebreak;
 
     /**
-     * @return Debug|mixed
+     * @param array $options
      */
-    public static function instance()
+    protected function initialize(array $options)
     {
-        return parent::instance();
-    }
-
-    /**
-     * @param int $envMax  - the maximum environment which would still output debug information. An example
-     *                       would be if this was set to STAGING, only production environments would NOT show debug info
-     * @param string $sapi - the current server API
-     */
-    public function init(int $envMax, string $sapi)
-    {
-        $this->linebreak = (strpos($sapi, 'cli') !== false) ? self::LINEBREAK_TEXT : self::LINEBREAK_BOTH;
-        $this->envMax = $envMax;
+        $this->linebreak = (strpos(php_sapi_name(), 'cli') !== false) ? self::LINEBREAK_TEXT : self::LINEBREAK_BOTH;
+        $this->envMax = $options[0];
 
         $this->environment = Environment::instance();
     }
