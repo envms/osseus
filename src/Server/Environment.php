@@ -22,19 +22,11 @@ class Environment extends Singleton
     protected $current = null;
 
     /**
-     * @return Environment|mixed
+     * @param mixed $options
      */
-    public static function instance()
+    protected function initialize(array $options): void
     {
-        return parent::instance();
-    }
-
-    /**
-     * @param int $environment
-     */
-    public function init(int $environment): void
-    {
-        $this->current = $environment;
+        $this->current = $options[0];
     }
 
     /**
