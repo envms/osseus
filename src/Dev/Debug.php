@@ -47,8 +47,8 @@ class Debug extends Singleton
      */
     public function ks()
     {
-        if ($this->environment->getCurrent() <= $this->envMax) {
-            $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2)[1];
+        if ($this->isActive()) {
+            $backtrace = $this->getBacktrace();
             exit("<b style='font-family:Consolas,monospace;color:#c04;'>Application terminated ({$backtrace['file']} - Line {$backtrace['line']})</b>");
         } else {
             exit('Exited');
@@ -64,7 +64,7 @@ class Debug extends Singleton
      */
     public function p($var, $title = '', $titleColor = '#c22')
     {
-        if ($this->environment->getCurrent() <= $this->envMax) {
+        if ($this->isActive()) {
             $var = self::determineOutput($var);
             echo self::PRE[0];
 
@@ -88,7 +88,7 @@ class Debug extends Singleton
      */
     public function pd($var, $title = '', $titleColor = '#c22')
     {
-        if ($this->environment->getCurrent() <= $this->envMax) {
+        if ($this->isActive()) {
             $var = self::determineOutput($var);
             echo self::PRE[0];
 
@@ -114,7 +114,7 @@ class Debug extends Singleton
      */
     public function vd($var, $title = '', $titleColor = '#c22')
     {
-        if ($this->environment->getCurrent() <= $this->envMax) {
+        if ($this->isActive()) {
             echo self::PRE[0];
 
             if ($title !== '') {
@@ -137,7 +137,7 @@ class Debug extends Singleton
      */
     public function vdd($var, $title = '', $titleColor = '#c22')
     {
-        if ($this->environment->getCurrent() <= $this->envMax) {
+        if ($this->isActive()) {
             echo self::PRE[0];
 
             if ($title !== '') {
@@ -158,10 +158,10 @@ class Debug extends Singleton
      */
     public function memory()
     {
-        echo 'Memory Usage: ' . round((memory_get_usage() / 1024), 2) . 'kb / Real: ' . round((memory_get_usage(true) / 1024),
-                2) . 'kb' . $this->linebreak;
-        echo 'Peak Usage: ' . round((memory_get_peak_usage() / 1024), 2) . 'kb / Real: ' . round((memory_get_peak_usage(true) / 1024),
-                2) . 'kb' . $this->linebreak;
+        echo 'Memory Usage: ' . round((memory_get_usage() / 1024), 2) . 'kb / Real: '
+            . round((memory_get_usage(true) / 1024), 2) . 'kb' . $this->linebreak;
+        echo 'Peak Usage: ' . round((memory_get_peak_usage() / 1024), 2) . 'kb / Real: '
+            . round((memory_get_peak_usage(true) / 1024), 2) . 'kb' . $this->linebreak;
     }
 
     /**
@@ -177,12 +177,28 @@ class Debug extends Singleton
      */
     public function stats()
     {
-        if ($this->environment->getCurrent() <= $this->envMax) {
+        if ($this->isActive()) {
             echo '<div style="position:fixed; bottom:0; right:0; font-family:Consolas,monospace; font-size:12px;">';
             self::execTime();
             self::memory();
             echo '</div>';
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getBacktrace(): array
+    {
+        return debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 3)[2];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->environment->getCurrent() <= $this->envMax;
     }
 
     /**
@@ -192,7 +208,7 @@ class Debug extends Singleton
      *
      * @return string
      */
-    public function determineOutput($var)
+    protected function determineOutput($var)
     {
         if (is_array($var)) {
             return print_r($var, true);
@@ -206,5 +222,4 @@ class Debug extends Singleton
 
         return $var;
     }
-
 }
