@@ -9,8 +9,6 @@ use Envms\Osseus\Security\Validate;
 
 /**
  * Class Route
- *
- *
  */
 class Route implements RouteInterface
 {
@@ -36,7 +34,7 @@ class Route implements RouteInterface
     /**
      * For determining the appropriate actions to pass to go()
      *
-     * @param  Uri    $uri
+     * @param  Uri $uri
      *
      * @throws DoesNotExistException|InvalidException
      *
