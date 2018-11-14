@@ -17,16 +17,30 @@ abstract class Singleton implements SingletonInterface
     protected static $instances = [];
 
     /**
+     * @param mixed $options - Initialization options
+     *
      * @return mixed
      */
-    public static function instance()
+    public static function instance(...$options)
     {
         $class = get_called_class(); // late static-bound class name
+
         if (!isset(self::$instances[$class])) {
-            self::$instances[$class] = new static;
+            $instance = new static();
+            $instance->initialize($options);
+            self::$instances[$class] = $instance;
         }
 
         return self::$instances[$class];
+    }
+
+    /**
+     * @note Provides an optional hook, which is called within instance()
+     *
+     * @param array $options
+     */
+    protected function initialize(array $options = [])
+    {
     }
 
     /**
