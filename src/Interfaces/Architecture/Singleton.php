@@ -7,7 +7,10 @@ namespace Envms\Osseus\Interfaces\Architecture;
  */
 interface Singleton
 {
-    public static function instance();
+    /**
+     * @param mixed ...$options
+     */
+    public static function instance(...$options);
 
     public function __sleep();
 
