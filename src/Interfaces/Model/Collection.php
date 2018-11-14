@@ -2,12 +2,10 @@
 
 namespace Envms\Osseus\Interfaces\Model;
 
-use Envms\Osseus\Model\Model;
-
 /**
  * Interface Collection
  */
-interface Collection extends \Iterator
+interface Collection extends \IteratorAggregate
 {
 
     /**

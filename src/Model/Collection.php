@@ -11,12 +11,8 @@ use Envms\Osseus\Interfaces\Model\Collection as CollectionInterface;
  */
 abstract class Collection implements CollectionInterface
 {
-    /** @var int */
-    private $position;
-
     /** @var array */
     protected $models = [];
-
     /** @var string */
     protected $modelName;
 
@@ -27,7 +23,6 @@ abstract class Collection implements CollectionInterface
      */
     public function __construct()
     {
-        $this->position = 0;
         $this->modelName = $this->getModelName();
     }
 
@@ -55,51 +50,6 @@ abstract class Collection implements CollectionInterface
     public function fetchAll()
     {
         return $this->models;
-    }
-
-    public function rewind()
-    {
-        $this->position = 0;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function current()
-    {
-        return $this->models[$this->position];
-    }
-
-    /**
-     * @return int
-     */
-    public function key()
-    {
-        return $this->position;
-    }
-
-    /**
-     * @return mixed|void
-     */
-    public function next()
-    {
-        ++$this->position;
-    }
-
-    /**
-     * @return mixed|void
-     */
-    public function previous()
-    {
-        --$this->position;
-    }
-
-    /**
-     * @return bool
-     */
-    public function valid()
-    {
-        return isset($this->models[$this->position]);
     }
 
     /**
