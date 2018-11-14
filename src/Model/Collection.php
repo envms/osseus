@@ -102,4 +102,67 @@ abstract class Collection implements CollectionInterface
 
         return $modelsAdded;
     }
+
+    /**
+     * @param Model $model
+     *
+     * @return int
+     */
+    public function addModel(Model $model): int
+    {
+        $this->models[$model->id] = $model;
+
+        return $model->id;
+    }
+
+    /**
+     * @param Collection $collection
+     */
+    public function merge(Collection $collection)
+    {
+        foreach ($collection as $model) {
+            $this->addModel($model);
+        }
+    }
+
+    /**
+     * @param string $property
+     *
+     * @return array
+     */
+    public function mapBy(string $property): array
+    {
+        $properties = [];
+        foreach ($this->models as $model) {
+            $properties[] = $model->$property;
+        }
+
+        return $properties;
+    }
+
+    /**
+     * @return array
+     */
+    public function getIds(): array
+    {
+        return $this->getModelPropertyArray('id');
+    }
+
+    /**
+     * @param string $delimiter
+     *
+     * @return string|array
+     */
+    public function getDelimitedIds(string $delimiter = ','): string
+    {
+        return implode($delimiter, $this->getModelIds());
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->models);
+    }
 }
