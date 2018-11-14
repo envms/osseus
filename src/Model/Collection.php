@@ -92,13 +92,13 @@ abstract class Collection implements CollectionInterface
      */
     public function addMany(array $data): int
     {
-        $position = $this->count();
+        $previousCount = $this->count();
 
         foreach ($data as $modelData) {
-            $this->models[$position++] = new $this->modelName($modelData);
+            $this->add($modelData);
         }
 
-        $modelsAdded = $position - $this->count();
+        $modelsAdded = $previousCount - $this->count();
 
         return $modelsAdded;
     }
