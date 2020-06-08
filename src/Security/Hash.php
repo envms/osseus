@@ -2,8 +2,6 @@
 
 namespace Envms\Osseus\Security;
 
-use Envms\Osseus\Utils\Regex;
-
 /**
  * Class Hash
  */
@@ -28,13 +26,11 @@ class Hash
     /**
      * Hash constructor
      *
-     * @param string $secret - Normally supplied by env.json file
-     * @param Regex  $regex
+     * @param string $secret
      */
-    public function __construct(string $secret, Regex $regex)
+    public function __construct(string $secret)
     {
         $this->secret = $secret;
-        $this->regex = $regex;
     }
 
     /**
