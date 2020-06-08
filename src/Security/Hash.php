@@ -6,18 +6,21 @@ use Envms\Osseus\Utils\Regex;
 
 /**
  * Class Hash
- *
- *
  */
 class Hash
 {
     const GOST = 'gost';
+    const HAVAL256 = 'haval256,5';
     const MD5 = 'md5';
     const SHA1 = 'sha1';
     const SHA256 = 'sha256';
     const SHA3_256 = 'sha3-256';
     const SHA3_512 = 'sha3-512';
     const WHIRLPOOL = 'whirlpool';
+
+    const PASS_BCRYPT = '2y';
+    const PASS_ARGON2I = 'argon2i';
+    const PASS_ARGON2ID = 'argon2id';
 
     /** @var string $secret */
     protected $secret;
@@ -43,27 +46,5 @@ class Hash
     public function data($data, $algorithm = self::SHA3_256)
     {
         return hash($algorithm, $this->secret . $data);
-    }
-
-    /**
-     * This password hasher is very often overkill, however it's minimal overhead for more security
-     *
-     * @param string $password
-     * @param string $salt
-     * @param string $algorithm
-     *
-     * @return string
-     */
-    public function password(string $password, string $salt = '', string $algorithm = self::SHA3_512)
-    {
-        // split the password into three equal-sized chunks
-        $splitPassword = $this->regex->split($password, Regex::SPLIT_SECTIONS, 3);
-        // apply the secret and salt to make the password just a little more secure
-        $toHash = $splitPassword[0] . $this->secret . $splitPassword[1] . $salt . $splitPassword[2];
-        // hash the combined string
-        $toHash = hash($algorithm, $toHash);
-
-        // hash again with a little more salt added
-        return hash($algorithm, $salt . $toHash);
     }
 }
