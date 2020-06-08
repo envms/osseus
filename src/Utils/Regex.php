@@ -32,10 +32,6 @@ class Regex
     const NOT_WHITESPACE = '[[:^space:]]';
     const NOT_WORD = '[[:^word:]]';
 
-    const SPLIT_EACH = 0;
-    const SPLIT_SECTIONS = 1;
-    const SPLIT_LENGTH = 2;
-
     /** @var mixed */
     protected $subject;
     /** @var mixed */
@@ -94,47 +90,6 @@ class Regex
     public function replace(string $pattern, string $replace = '', string $modifiers = 'u', int $limit = -1)
     {
         return preg_replace('/' . $pattern . '/' . $modifiers, $replace, $this->subject, $limit, $this->store);
-    }
-
-    /**
-     * A unicode-safe method of splitting a string
-     *
-     * @param string $string
-     * @param int    $type  - Method by which to split the string. Can be one of SPLIT_EACH,
-     *                        SPLIT_SECTIONS or SPLIT_LENGTH
-     * @param int    $count - How long each section should be (if the $sections argument is not set)
-     *
-     * @return array|bool
-     */
-    public function split(string $string, int $type = self::SPLIT_EACH, int $count = 1)
-    {
-        $split = [];
-        $strlen = mb_strlen($string);
-
-        // if only a string is passed, split the string character by character
-        if ($type === self::SPLIT_EACH) {
-            return preg_split("//u", $string, -1, PREG_SPLIT_NO_EMPTY);
-        } elseif ($type === self::SPLIT_SECTIONS) {
-            // if the sections argument is set, overwrite the length argument with an equal split value
-            $length = ceil($strlen / $count);
-
-            for ($i = 0; $i < $count; $i++) {
-                $start = $i * $length;
-                $split[] = mb_substr($string, $start, $length);
-            }
-
-            return $split;
-        } elseif ($type === self::SPLIT_LENGTH) {
-            // split by the requested chunk size
-            for ($i = 0; $i < $strlen; $i += $count) {
-                $split[] = mb_substr($string, $i, $count);
-            }
-
-            return $split;
-        } else {
-            // invalid split type selected
-            return false;
-        }
     }
 
     /**
