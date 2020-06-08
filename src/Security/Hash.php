@@ -35,12 +35,13 @@ class Hash
 
     /**
      * @param mixed  $data
+     * @param string $salt
      * @param string $algorithm
      *
      * @return string
      */
-    public function data($data, $algorithm = self::SHA3_256)
+    public function fromData($data, string $salt = '', $algorithm = self::SHA3_512): string
     {
-        return hash($algorithm, $this->secret . $data);
+        return hash($algorithm, "{$this->secret}{$data}{$salt}");
     }
 }
