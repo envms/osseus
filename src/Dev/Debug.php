@@ -15,28 +15,26 @@ class Debug extends Singleton
 {
     /** @const - used to add ascii line breaks to printed data sets */
     protected const LINEBREAK_TEXT = "\r\n";
-    /** @const - used to add html line breaks to printed data sets */
-    protected const LINEBREAK_HTML = "<br>";
     /** @const - used to add line breaks to printed data sets */
-    protected const LINEBREAK_BOTH = "<br>\r\n";
+    protected const LINEBREAK_HTML = "<br>\r\n";
     /** @const - html friendly formatting */
     protected const PRE = ['<pre>', '</pre>'];
 
     /** @var Environment */
-    public $environment;
+    public Environment $environment;
     /** @var int - the maximum environment which would still output debug information
      *             Example: if set to STAGING, only production environments would NOT show debug data
      */
-    public $envMax;
+    public int $envMax;
     /** @var string */
-    public $linebreak;
+    public string $linebreak;
 
     /**
      * @param array $options
      */
     protected function initialize(array $options)
     {
-        $this->linebreak = (strpos(php_sapi_name(), 'cli') !== false) ? self::LINEBREAK_TEXT : self::LINEBREAK_BOTH;
+        $this->linebreak = (strpos(php_sapi_name(), 'cli') !== false) ? self::LINEBREAK_TEXT : self::LINEBREAK_HTML;
         $this->envMax = $options[0];
 
         $this->environment = Environment::instance();
@@ -65,7 +63,7 @@ class Debug extends Singleton
     public function p($var, $title = '', $titleColor = '#c22')
     {
         if ($this->isActive()) {
-            $var = self::determineOutput($var);
+            $var = $this->determineOutput($var);
             echo self::PRE[0];
 
             if ($title !== '') {
@@ -88,21 +86,8 @@ class Debug extends Singleton
      */
     public function pd($var, $title = '', $titleColor = '#c22')
     {
-        if ($this->isActive()) {
-            $var = self::determineOutput($var);
-            echo self::PRE[0];
-
-            if ($title !== '') {
-                echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
-            }
-
-            echo $var
-                . self::PRE[1]
-                . $this->linebreak
-                . $this->linebreak;
-
-            self::ks();
-        }
+        $this->p($var, $title, $titleColor);
+        $this->ks();
     }
 
     /**
@@ -137,20 +122,8 @@ class Debug extends Singleton
      */
     public function vdd($var, $title = '', $titleColor = '#c22')
     {
-        if ($this->isActive()) {
-            echo self::PRE[0];
-
-            if ($title !== '') {
-                echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
-            }
-
-            var_dump($var);
-            echo self::PRE[1]
-                . $this->linebreak
-                . $this->linebreak;
-
-            self::ks();
-        }
+        $this->vd($var, $title, $titleColor);
+        $this->ks();
     }
 
     /**
@@ -158,10 +131,12 @@ class Debug extends Singleton
      */
     public function memory()
     {
-        echo 'Memory Usage: ' . round((memory_get_usage() / 1024), 2) . 'kb / Real: '
-            . round((memory_get_usage(true) / 1024), 2) . 'kb' . $this->linebreak;
-        echo 'Peak Usage: ' . round((memory_get_peak_usage() / 1024), 2) . 'kb / Real: '
-            . round((memory_get_peak_usage(true) / 1024), 2) . 'kb' . $this->linebreak;
+        if ($this->isActive()) {
+            echo 'Memory Usage: ' . round((memory_get_usage() / 1024), 2) . 'kb / Real: '
+                . round((memory_get_usage(true) / 1024), 2) . 'kb' . $this->linebreak;
+            echo 'Peak Usage: ' . round((memory_get_peak_usage() / 1024), 2) . 'kb / Real: '
+                . round((memory_get_peak_usage(true) / 1024), 2) . 'kb' . $this->linebreak;
+        }
     }
 
     /**
@@ -169,7 +144,9 @@ class Debug extends Singleton
      */
     public function execTime()
     {
-        echo 'Execution time: ' . round(((microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']) * 1000), 2) . 'ms' . self::$linebreak;
+        if ($this->isActive()) {
+            echo 'Execution time: ' . round(((microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']) * 1000), 2) . 'ms' . $this->linebreak;
+        }
     }
 
     /**
@@ -177,12 +154,10 @@ class Debug extends Singleton
      */
     public function stats()
     {
-        if ($this->isActive()) {
-            echo '<div style="position:fixed; bottom:0; right:0; font-family:Consolas,monospace; font-size:12px;">';
-            self::execTime();
-            self::memory();
-            echo '</div>';
-        }
+        echo '<div style="position:fixed; bottom:0; right:0; font-family:monospace; font-size:12px;">';
+        $this->execTime();
+        $this->memory();
+        echo '</div>';
     }
 
     /**
