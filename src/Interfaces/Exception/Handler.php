@@ -2,6 +2,8 @@
 
 namespace Envms\Osseus\Interfaces\Exception;
 
+use Throwable;
+
 /**
  * Interface Handler
  *
@@ -11,7 +13,7 @@ namespace Envms\Osseus\Interfaces\Exception;
 interface Handler
 {
     /**
-     * @param \Throwable $e
+     * @param Throwable $e
      */
-    public static function get(\Throwable $e);
+    public static function get(Throwable $e);
 }
