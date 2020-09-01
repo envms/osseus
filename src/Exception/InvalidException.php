@@ -10,5 +10,5 @@ namespace Envms\Osseus\Exception;
  */
 class InvalidException extends Exception
 {
-
+    protected $message = 'Invalid exception thrown';
 }

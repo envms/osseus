@@ -11,7 +11,6 @@ use Envms\Osseus\Dev\Debug;
  */
 abstract class Exception extends \Exception
 {
-    /** @var string */
     protected $message = 'Default \Envms\Osseus\Exception';
 
     /**
