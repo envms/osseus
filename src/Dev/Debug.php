@@ -18,7 +18,7 @@ class Debug extends Singleton
     /** @const - used to add line breaks to printed data sets */
     protected const LINEBREAK_HTML = "<br>\r\n";
     /** @const - html friendly formatting */
-    protected const PRE = ['<pre>', '</pre>'];
+    protected const PRE_TAG = ['<pre>', '</pre>'];
 
     /** @var Environment */
     public Environment $environment;
@@ -48,9 +48,9 @@ class Debug extends Singleton
         if ($this->isActive()) {
             $backtrace = $this->getBacktrace();
             exit("<b style='font-family:Consolas,monospace;color:#c04;'>Application terminated ({$backtrace['file']} - Line {$backtrace['line']})</b>");
-        } else {
-            exit('Exited');
         }
+
+        exit('Exited');
     }
 
     /**
@@ -64,14 +64,14 @@ class Debug extends Singleton
     {
         if ($this->isActive()) {
             $var = $this->determineOutput($var);
-            echo self::PRE[0];
+            echo self::PRE_TAG[0];
 
             if ($title !== '') {
                 echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
             }
 
             echo $var
-                . self::PRE[1]
+                . self::PRE_TAG[1]
                 . $this->linebreak
                 . $this->linebreak;
         }
@@ -100,14 +100,14 @@ class Debug extends Singleton
     public function vd($var, $title = '', $titleColor = '#c22')
     {
         if ($this->isActive()) {
-            echo self::PRE[0];
+            echo self::PRE_TAG[0];
 
             if ($title !== '') {
                 echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
             }
 
             var_dump($var);
-            echo self::PRE[1]
+            echo self::PRE_TAG[1]
                 . $this->linebreak
                 . $this->linebreak;
         }
@@ -187,12 +187,14 @@ class Debug extends Singleton
     {
         if (is_array($var)) {
             return print_r($var, true);
-        } elseif (is_object($var)) {
+        }
+
+        if (is_object($var)) {
             if (method_exists($var, '__toString')) {
                 return $var->__toString();
-            } else {
-                return print_r($var, true);
             }
+
+            return print_r($var, true);
         }
 
         return $var;
