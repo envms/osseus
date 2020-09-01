@@ -30,12 +30,12 @@ class Debug extends Singleton
     public string $linebreak;
 
     /**
-     * @param array $options
+     * @param array $parameters
      */
-    protected function initialize(array $options)
+    protected function initialize(array $parameters = []): void
     {
         $this->linebreak = (strpos(php_sapi_name(), 'cli') !== false) ? self::LINEBREAK_TEXT : self::LINEBREAK_HTML;
-        $this->envMax = $options[0];
+        $this->envMax = $parameters[0];
 
         $this->environment = Environment::instance();
     }
