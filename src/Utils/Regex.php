@@ -63,7 +63,7 @@ class Regex
      */
     public function match(string $pattern, string $modifiers = 'u', int $flags = 0, int $offset = 0)
     {
-        return preg_match('/' . $pattern . '/' . $modifiers, $this->subject, $this->store, $flags, $offset);
+        return preg_match("/{$pattern}/{$modifiers}", $this->subject, $this->store, $flags, $offset);
     }
 
     /**
@@ -76,7 +76,7 @@ class Regex
      */
     public function matchAll(string $pattern, string $modifiers = 'u', int $flags = PREG_PATTERN_ORDER, int $offset = 0)
     {
-        return preg_match('/' . $pattern . '/' . $modifiers, $this->subject, $this->store, $flags, $offset);
+        return preg_match_all("/{$pattern}/{$modifiers}", $this->subject, $this->store, $flags, $offset);
     }
 
     /**
@@ -89,7 +89,7 @@ class Regex
      */
     public function replace(string $pattern, string $replace = '', string $modifiers = 'u', int $limit = -1)
     {
-        return preg_replace('/' . $pattern . '/' . $modifiers, $replace, $this->subject, $limit, $this->store);
+        return preg_replace("/{$pattern}/{$modifiers}", $replace, $this->subject, $limit, $this->store);
     }
 
     /**
