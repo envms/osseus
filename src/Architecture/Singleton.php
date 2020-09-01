@@ -2,6 +2,7 @@
 
 namespace Envms\Osseus\Architecture;
 
+use Envms\Osseus\Exception\InvalidException;
 use Envms\Osseus\Interfaces\Architecture\Singleton as SingletonInterface;
 
 /**
@@ -14,7 +15,7 @@ use Envms\Osseus\Interfaces\Architecture\Singleton as SingletonInterface;
 abstract class Singleton implements SingletonInterface
 {
     /** @var array */
-    protected static $instances = [];
+    protected static array $instances = [];
 
     /**
      * @param mixed $parameters - Initialization options
@@ -23,7 +24,7 @@ abstract class Singleton implements SingletonInterface
      */
     public static function instance(...$parameters)
     {
-        $class = get_called_class(); // late static-bound class name
+        $class = static::class; // late static-bound class name
 
         if (!isset(self::$instances[$class])) {
             $instance = new static();
@@ -63,20 +64,20 @@ abstract class Singleton implements SingletonInterface
      * @note Only one instance of each subclass can ever exist. We remove the serialization
      * capability of a Singleton here.
      *
-     * @return bool
+     * @throws InvalidException
      */
     public function __sleep()
     {
-        return false;
+        throw new InvalidException('Classes derived from abstract Singleton cannot be stored or serialized.');
     }
 
     /**
      * @see __sleep() method's note
      *
-     * @return bool
+     * @throws InvalidException
      */
     public function __wakeup()
     {
-        return false;
+        throw new InvalidException('Classes derived from abstract Singleton cannot be retrieved or unserialized.');
     }
 }
