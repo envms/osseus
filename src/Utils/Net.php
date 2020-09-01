@@ -24,7 +24,7 @@ class Net
      *
      * @return bool|string
      */
-    public static function getIpv6Prefix($address, $prefixLength = 64)
+    public static function getIpv6Prefix($address, int $prefixLength = 64)
     {
         $binaryPrefix = '';
         $remainingBits = $prefixLength;
@@ -36,7 +36,7 @@ class Net
 
             // get the bit-mask based on how many bits we want to copy
             $copyBits = max(0, min(8, $remainingBits));
-            $mask = 256 - pow(2, 8 - $copyBits);
+            $mask = 256 - (2 ** (8 - $copyBits));
 
             // apply the mask to the byte
             $currentByte &= $mask;
@@ -61,9 +61,9 @@ class Net
         // determine whether the address is IPv4 or IPv6
         if (filter_var($address, FILTER_FLAG_IPV6) !== false) {
             return self::getIpv6Prefix($address);
-        } else {
-            return self::getIpv4Subnet($address);
         }
+
+        return self::getIpv4Subnet($address);
     }
 
     /**
@@ -73,7 +73,7 @@ class Net
      *
      * @return bool
      */
-    public static function matchIpv6Cidr($address, $addressPrefix = null, $prefixLength = 64)
+    public static function matchIpv6Cidr($address, $addressPrefix = null, int $prefixLength = 64)
     {
         if ($addressPrefix !== null) {
             $addressPrefix = inet_pton($addressPrefix);
