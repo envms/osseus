@@ -1,3 +1,5 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/cf807c36168b7242a576/maintainability)](https://codeclimate.com/github/envms/osseus/maintainability)
+
 # Osseus Framework
 
 #### Current version is beta-1 (v0.3.0)
