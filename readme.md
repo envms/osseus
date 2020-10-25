@@ -1,23 +1,30 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/cf807c36168b7242a576/maintainability)](https://codeclimate.com/github/envms/osseus/maintainability)
 
-# Osseus Framework
+<h1 align="center">
+Osseus<br>
+Upgrade Your Legacy PHP Code
+</h1>
 
-#### Current version is beta-1 (v0.3.0)
+Osseus is a light and tiny PHP framework/library that integrates with any application.
+It provides both a RESTful API and a more "traditional" service to support incremental
+code improvements.
 
-Osseus is a light and tiny PHP framework and toolbox. Its goal is to be flexible and impartial to code and database
-structures. It interfaces with FluentPDO 2.0 to provide quick and seamless database interactions.
-
-Osseus can be used as a standard application framework or simply as a utility library.
+Osseus can be used as a full-featured application framework, or simply as a utility
+library to help your application scale. Its goal is to be flexible and impartial to
+code and database structures.
 
 ### Features
 
 - light and fast router with a smart URI parser
 - built-in security tools to validate and sanitize data
-- an Internationalization template system to implement new languages quickly and easily
+- interfaces with [FluentPDO](https://github.com/envms/fluentpdo) to provide quick
+and seamless database interactions
+- an internationalization template system to implement new languages quickly and easily
 - classic MVC system with some small additions
 
 ### Contributions
-Contributors are more than welcome to help test and improve Osseus
+
+Contributors are very welcome to help test and improve Osseus
 
 ### Usage
 
@@ -25,18 +32,21 @@ To get started, all you need is a little setup:
 
 ```php
 // add necessary classes
+use Envms\Osseus\Dev\Debug;
 use Envms\Osseus\Parse\Uri;
 use Envms\Osseus\Router\Route;
 use Envms\Osseus\Server\Environment;
 
 // set your environment
-$environment = Environment::instance();
-$environment->init(Environment::DEVELOPMENT);
+$environment = Environment::instance(Environment::DEVELOPMENT); // the current environment
+$debug = Debug::instance(Environment::TESTING); // the maximum environment to show debug statements
 
-// parse the URI and route to a controller
+// optional but recommended - parse the URI and route to the index controller
 $uri = new Uri($_SERVER['REQUEST_URI']);
 $router = new Route('TestApp');
 $router->go($uri);
 ```
 
-The router will direct the `$uri` to your application's controller and action, and you're on your way! Documentation is coming soon.
+The router will direct the `$uri` to your application's controller and action, and you're on your way!
+
+#### The current version is beta-2 (v0.4.3)

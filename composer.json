@@ -1,7 +1,7 @@
 {
 	"name": "envms/osseus",
-	"description": "Osseus is a lightweight library for creating fast applications. It can be used as a framework and to create API-centric software",
-	"keywords": ["framework", "skeleton", "fluent", "api", "library", "application", "restful"],
+	"description": "Osseus is a standalone PHP framework / library to update and refactor legacy code",
+	"keywords": ["framework", "legacy", "api", "library", "refactor", "application", "restful", "fluent"],
 	"homepage": "https://github.com/envms/osseus",
 	"license": ["GPL-3.0"],
 	"authors": [
@@ -16,8 +16,9 @@
 		}
 	},
 	"require": {
-		"ext-pdo": "*"
-	},
+		"ext-pdo": "*",
+    "ext-mbstring": "*"
+  },
 	"require-dev": {
 		"phpunit/phpunit": "8.*"
 	}
