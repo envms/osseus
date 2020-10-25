@@ -22,7 +22,7 @@ class Route implements RouteInterface
     /**
      * Route constructor
      *
-     * @param string $applicationName - The calling application's namespace
+     * @param string $applicationName - The application's name and namespace
      * @param array $map
      */
     public function __construct(string $applicationName = '', array $map = [])
@@ -135,9 +135,9 @@ class Route implements RouteInterface
             $map = $this->map[$controller][$action];
             if (count($map) === count($params)) {
                 return array_combine($map, $params);
-            } else {
-                throw new InvalidException('URL and Route parameter count must be equal');
             }
+
+            throw new InvalidException('URL and Route parameter count must be equal');
         }
 
         return $params;
