@@ -12,7 +12,7 @@ use Envms\Osseus\Architecture\Singleton;
 class Environment extends Singleton
 {
     public const DEVELOPMENT = 1;
-    public const NIGHTLY = 2;
+    public const TESTING = 2;
     public const STAGING = 3;
     public const PRODUCTION = 4;
 
