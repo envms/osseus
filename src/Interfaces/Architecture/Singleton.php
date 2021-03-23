@@ -15,10 +15,9 @@ namespace Envms\Osseus\Interfaces\Architecture;
  */
 interface Singleton
 {
-    /**
-     * @param mixed ...$options
-     */
-    public static function instance(...$options);
+    public static function instance(...$parameters);
+
+    public function initialize(...$parameters): void;
 
     public function __sleep();
 

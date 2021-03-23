@@ -15,7 +15,7 @@ abstract class Singleton implements SingletonInterface
     protected static array $instances = [];
 
     /**
-     * @note Standard class construction within Singletons is not allowed. Making this
+     * Standard class construction within Singletons is not allowed. Making this
      * a private empty method prevents construction.
      */
     private function __construct()
@@ -27,7 +27,7 @@ abstract class Singleton implements SingletonInterface
      *
      * @return mixed
      */
-    public static function instance(...$parameters)
+    public static function instance(...$parameters): object
     {
         $class = static::class; // late static-bound class name
 
@@ -39,13 +39,7 @@ abstract class Singleton implements SingletonInterface
 
         return self::$instances[$class];
     }
-
-    /**
-     * @note Provides an optional hook, which is called within instance()
-     *
-     * @param array $parameters
-     */
-    protected function initialize(array $parameters = []): void
+    public function initialize(...$parameters): void
     {
     }
 
