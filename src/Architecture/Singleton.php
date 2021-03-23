@@ -6,16 +6,21 @@ use Envms\Osseus\Exception\InvalidException;
 use Envms\Osseus\Interfaces\Architecture\Singleton as SingletonInterface;
 
 /**
- * Class Singleton
+ * Singleton Class
  *
- * @note When using Osseus, the singleton pattern is recommended to only be used in very specific use cases.
- *       An example would be a class which, without ensuring only one instance, would need be
- *       injected into nearly every class within the application.
+ * @see SingletonInterface for a description of what a singleton is.
  */
 abstract class Singleton implements SingletonInterface
 {
-    /** @var array */
     protected static array $instances = [];
+
+    /**
+     * @note Standard class construction within Singletons is not allowed. Making this
+     * a private empty method prevents construction.
+     */
+    private function __construct()
+    {
+    }
 
     /**
      * @param mixed $parameters - Initialization options
@@ -45,30 +50,15 @@ abstract class Singleton implements SingletonInterface
     }
 
     /**
-     * @note Standard class construction within Singletons is not allowed. Making this
-     * a private empty method prevents construction.
-     */
-    private function __construct()
-    {
-    }
-
-    /**
-     * @note Similar to class construction, a Singleton instance cannot be cloned as this
-     * would violate the pattern rules.
-     */
-    private function __clone()
-    {
-    }
-
-    /**
      * @note Only one instance of each subclass can ever exist. We remove the serialization
      * capability of a Singleton here.
-     *
      * @throws InvalidException
      */
-    public function __sleep()
+    public function __sleep(): array
     {
         throw new InvalidException('Classes derived from abstract Singleton cannot be stored or serialized.');
+
+        return [];
     }
 
     /**
@@ -79,5 +69,13 @@ abstract class Singleton implements SingletonInterface
     public function __wakeup()
     {
         throw new InvalidException('Classes derived from abstract Singleton cannot be retrieved or unserialized.');
+    }
+
+    /**
+     * @note Similar to class construction, a Singleton instance cannot be cloned as this
+     * would violate the pattern rules.
+     */
+    private function __clone()
+    {
     }
 }
