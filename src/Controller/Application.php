@@ -2,6 +2,7 @@
 
 namespace Envms\Osseus\Controller;
 
+use ReflectionClass, ReflectionException;
 use Envms\Osseus\Interfaces\Controller\Controller;
 use Envms\Osseus\Interfaces\Model\Carbon;
 
@@ -27,7 +28,7 @@ abstract class Application implements Controller
      * @param array $options
      * @param array $form
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function __construct(array $params, array $options, array $form)
     {
@@ -35,7 +36,7 @@ abstract class Application implements Controller
         $this->options = $options;
         $this->form = $form;
 
-        $reflection = new \ReflectionClass($this);
+        $reflection = new ReflectionClass($this);
         $carbonClass = "{$reflection->getNamespaceName()}\\Carbon";
 
         $this->carbon = new $carbonClass();
