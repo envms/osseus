@@ -2,55 +2,57 @@
 
 namespace Envms\Osseus\Dev;
 
-
 use Envms\Osseus\Architecture\Singleton;
 use Envms\Osseus\Server\Environment;
+use function debug_backtrace;
+use function is_array;
+use function is_object;
+use function memory_get_peak_usage;
+use function memory_get_usage;
+use function method_exists;
+use function microtime;
+use function print_r;
+use function round;
+use function var_dump;
 
 /**
  * Class Debug
  *
- * A collection of quick debugging tools and performance metrics
+ * @description A collection of quick debugging tools and performance metrics. Many legacy production environments struggle to maintain
+ *              consistency with development or staging environments. This class helps where traditional debugging tools are unavailable.
  */
 class Debug extends Singleton
 {
-    /** @const - used to add ascii line breaks to printed data sets */
-    protected const LINEBREAK_TEXT = "\r\n";
-    /** @const - used to add line breaks to printed data sets */
-    protected const LINEBREAK_HTML = "<br>\r\n";
-    /** @const - html friendly formatting */
-    protected const PRE_TAG = ['<pre>', '</pre>'];
+    /** For adding line breaks to printed data sets */
+    protected const LINEBREAK_TEXT = "\n";
+    protected const LINEBREAK_HTML = "<br>\n";
 
-    /** @var Environment */
-    public Environment $environment;
-    /** @var int - the maximum environment which would still output debug information
-     *             Example: if set to STAGING, only production environments would NOT show debug data
+    /** For text delimiting and formatting */
+    protected const WRAPPER_TEXT = ['---', '~~~'];
+    protected const WRAPPER_HTML = ['<pre>', '</pre>'];
+
+    public string $linebreak = self::LINEBREAK_HTML;
+    public array $wrapper = self::WRAPPER_HTML;
+
+    /**
+     * The maximum environment which would still output debug information
+     *  Example: if set to STAGING, only production environments would NOT show debug data
      */
     public int $envMax;
-    /** @var string */
-    public string $linebreak;
+    public Environment $environment;
 
     /**
      * @param array $parameters
      */
-    protected function initialize(array $parameters = []): void
+    public function initialize(...$parameters): void
     {
-        $this->linebreak = (strpos(php_sapi_name(), 'cli') !== false) ? self::LINEBREAK_TEXT : self::LINEBREAK_HTML;
-        $this->envMax = $parameters[0];
-
         $this->environment = Environment::instance();
-    }
+        $this->envMax = $parameters[0] ?? Environment::DEVELOPMENT;
 
-    /**
-     * Exits and provides additional information on exactly where the script was killed
-     */
-    public function ks()
-    {
-        if ($this->isActive()) {
-            $backtrace = $this->getBacktrace();
-            exit("<b style='font-family:Consolas,monospace;color:#c04;'>Application terminated ({$backtrace['file']} - Line {$backtrace['line']})</b>");
+        if (str_contains(PHP_SAPI, 'cli')) {
+            $this->linebreak = self::LINEBREAK_TEXT;
+            $this->wrapper = self::WRAPPER_TEXT;
         }
-
-        exit('Exited');
     }
 
     /**
@@ -60,20 +62,17 @@ class Debug extends Singleton
      * @param string $title
      * @param string $titleColor
      */
-    public function p($var, $title = '', $titleColor = '#c22')
+    public function pr(mixed $var, string $title = '', string $titleColor = '#c22'): void
     {
         if ($this->isActive()) {
             $var = $this->determineOutput($var);
-            echo self::PRE_TAG[0];
+            echo $this->wrapper[0];
 
             if ($title !== '') {
                 echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
             }
 
-            echo $var
-                . self::PRE_TAG[1]
-                . $this->linebreak
-                . $this->linebreak;
+            echo "{$var}{$this->wrapper[1]}{$this->linebreak}{$this->linebreak}";
         }
     }
 
@@ -84,32 +83,59 @@ class Debug extends Singleton
      * @param string $title
      * @param string $titleColor
      */
-    public function pd($var, $title = '', $titleColor = '#c22')
+    public function prd(mixed $var, string $title = '', string $titleColor = '#c22'): void
     {
-        $this->p($var, $title, $titleColor);
+        $this->pr($var, $title, $titleColor);
         $this->ks();
     }
 
     /**
-     * var_dumps() variable contents
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->environment->getCurrent() <= $this->envMax;
+    }
+
+    /**
+     * Exits and provides additional information on exactly where the script was killed
+     */
+    public function ks(): void
+    {
+        if ($this->isActive()) {
+            $backtrace = $this->getBacktrace();
+            exit("<strong style='font-family:monospace;color:#c03;'>Terminated at {$backtrace['file']}:{$backtrace['line']}</strong>");
+        }
+
+        exit('Exited');
+    }
+
+    /**
+     * @return array
+     */
+    public function getBacktrace(): array
+    {
+        return debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 3)[2];
+    }
+
+    /**
+     * Dumps variable contents
      *
      * @param        $var - variable to print
      * @param string $title
      * @param string $titleColor
      */
-    public function vd($var, $title = '', $titleColor = '#c22')
+    public function vd(mixed $var, string $title = '', string $titleColor = '#c22'): void
     {
         if ($this->isActive()) {
-            echo self::PRE_TAG[0];
+            echo $this->wrapper[0];
 
             if ($title !== '') {
                 echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
             }
 
             var_dump($var);
-            echo self::PRE_TAG[1]
-                . $this->linebreak
-                . $this->linebreak;
+            echo "{$this->wrapper[1]}{$this->linebreak}{$this->linebreak}";
         }
     }
 
@@ -120,7 +146,7 @@ class Debug extends Singleton
      * @param string $title
      * @param string $titleColor
      */
-    public function vdd($var, $title = '', $titleColor = '#c22')
+    public function vdd($var, $title = '', $titleColor = '#c22'): void
     {
         $this->vd($var, $title, $titleColor);
         $this->ks();
@@ -129,7 +155,7 @@ class Debug extends Singleton
     /**
      * Prints memory usage for current script.
      */
-    public function memory()
+    public function memory(): void
     {
         if ($this->isActive()) {
             echo 'Memory Usage: ' . round((memory_get_usage() / 1024), 2) . 'kb / Real: '
@@ -142,7 +168,7 @@ class Debug extends Singleton
     /**
      * Prints execution time for current script.
      */
-    public function execTime()
+    public function execTime(): void
     {
         if ($this->isActive()) {
             echo 'Execution time: ' . round(((microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']) * 1000), 2) . 'ms' . $this->linebreak;
@@ -152,28 +178,12 @@ class Debug extends Singleton
     /**
      * Displays both execution time and memory usage for current script.
      */
-    public function stats()
+    public function stats(): void
     {
         echo '<div style="position:fixed; bottom:0; right:0; font-family:monospace; font-size:12px;">';
         $this->execTime();
         $this->memory();
         echo '</div>';
-    }
-
-    /**
-     * @return array
-     */
-    public function getBacktrace(): array
-    {
-        return debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 3)[2];
-    }
-
-    /**
-     * @return bool
-     */
-    public function isActive(): bool
-    {
-        return $this->environment->getCurrent() <= $this->envMax;
     }
 
     /**
@@ -183,7 +193,7 @@ class Debug extends Singleton
      *
      * @return string
      */
-    protected function determineOutput($var)
+    protected function determineOutput(mixed $var): string
     {
         if (is_array($var)) {
             return print_r($var, true);
