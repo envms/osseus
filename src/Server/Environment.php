@@ -16,17 +16,15 @@ class Environment extends Singleton
     public const STAGING = 3;
     public const PRODUCTION = 4;
 
-    /** @var int */
-    protected $previous = null;
-    /** @var int */
-    protected $current = null;
+    protected ?int $previous;
+    protected ?int $current;
 
     /**
-     * @param mixed $options
+     * @param array $parameters
      */
-    protected function initialize(array $options): void
+    public function initialize(...$parameters): void
     {
-        $this->current = $options[0];
+        $this->current = $parameters[0] ?? self::PRODUCTION;
     }
 
     /**
