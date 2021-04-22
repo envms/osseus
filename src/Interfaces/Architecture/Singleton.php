@@ -17,7 +17,7 @@ interface Singleton
 {
     public static function instance(...$parameters);
 
-    public function initialize(...$parameters): void;
+    public function initialize(array $parameters): void;
 
     public function __sleep();
 

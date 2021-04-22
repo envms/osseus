@@ -13,12 +13,12 @@ interface Collection extends \IteratorAggregate
      *
      * @return mixed
      */
-    public function __get(int $id);
+    public function __get(string $id);
 
     /**
      * @param int $id
      */
-    public function __unset(int $id);
+    public function __unset(string $id);
 
     /**
      * @param array $data
@@ -28,6 +28,6 @@ interface Collection extends \IteratorAggregate
     /**
      * @return mixed
      */
-    public function fetchAll();
+    public function all();
 
 }

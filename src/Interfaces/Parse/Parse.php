@@ -11,7 +11,7 @@ interface Parse
      * @param $input
      * @param $flags
      */
-    public function read($input, $flags);
+    public function read(string $input, $flags);
 
     /**
      * @param $input

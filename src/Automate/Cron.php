@@ -18,20 +18,14 @@ class Cron
     /** @var mixed */
     protected $logHandler;
 
-    /** @var \PDO */
-    public $pdo;
-
     /**
      * Cron constructor
      *
-     * @param \PDO   $pdo
      * @param        $log
      * @param string $logPath
      */
-    public function __construct(\PDO $pdo, $log, string $logPath)
+    public function __construct($log, string $logPath)
     {
-        $this->pdo = $pdo;
-
         $this->logHandler = new \Monolog\Handler\StreamHandler($logPath, \Monolog\Logger::INFO);
 
         if ($log instanceof \Monolog\Logger) {

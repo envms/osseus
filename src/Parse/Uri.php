@@ -62,7 +62,7 @@ class Uri implements Parse
      *
      * @return mixed
      */
-    public function read($uri, $flags): array
+    public function read(string $uri, $flags): array
     {
         return parse_url(urldecode($uri));
     }
@@ -75,14 +75,14 @@ class Uri implements Parse
      */
     public function write($uri, $flags): string
     {
-        $scheme = (!isset($uri['scheme'])) ? $uri['scheme'] . ':' : '';
-        $host = (!isset($uri['host'])) ? '//' . $uri['host'] : '';
-        $port = (!isset($uri['port'])) ? ':' . $uri['port'] : '';
+        $scheme = (!isset($uri['scheme'])) ? "{$uri['scheme']}:" : '';
+        $host = (!isset($uri['host'])) ? "//{$uri['host']}" : '';
+        $port = (!isset($uri['port'])) ? ":{$uri['port']}" : '';
         $path = (!isset($uri['path'])) ? $uri['path'] : '';
-        $query = (!isset($uri['query'])) ? '?' . $uri['query'] : '';
+        $query = (!isset($uri['query'])) ? "?{$uri['query']}" : '';
         $fragment = (!isset($uri['fragment'])) ? '#' . $uri['fragment'] : '';
 
-        $user = isset($uri['user']) ? $uri['user'] : '';
+        $user = $uri['user'] ?? '';
         $pass = isset($uri['pass']) ? ':' . $uri['pass']  : '';
         $pass = ($user || $pass) ? "$pass@" : '';
 

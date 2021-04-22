@@ -22,7 +22,7 @@ class Environment extends Singleton
     /**
      * @param array $parameters
      */
-    public function initialize(...$parameters): void
+    public function initialize(array $parameters): void
     {
         $this->current = $parameters[0] ?? self::PRODUCTION;
     }

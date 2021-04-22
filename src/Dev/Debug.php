@@ -28,7 +28,7 @@ class Debug extends Singleton
     protected const LINEBREAK_HTML = "<br>\n";
 
     /** For text delimiting and formatting */
-    protected const WRAPPER_TEXT = ['---', '~~~'];
+    protected const WRAPPER_TEXT = ['--BEGIN-->>>', '<<<~~END~~'];
     protected const WRAPPER_HTML = ['<pre>', '</pre>'];
 
     public string $linebreak = self::LINEBREAK_HTML;
@@ -44,7 +44,7 @@ class Debug extends Singleton
     /**
      * @param array $parameters
      */
-    public function initialize(...$parameters): void
+    public function initialize(array $parameters): void
     {
         $this->environment = Environment::instance();
         $this->envMax = $parameters[0] ?? Environment::DEVELOPMENT;
@@ -62,14 +62,14 @@ class Debug extends Singleton
      * @param string $title
      * @param string $titleColor
      */
-    public function pr(mixed $var, string $title = '', string $titleColor = '#c22'): void
+    public function pr(mixed $var, string $title = '', string $titleColor = '#35c'): void
     {
         if ($this->isActive()) {
             $var = $this->determineOutput($var);
             echo $this->wrapper[0];
 
             if ($title !== '') {
-                echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
+                echo "<h2 style='color:{$titleColor}'>{$title}</h2>";
             }
 
             echo "{$var}{$this->wrapper[1]}{$this->linebreak}{$this->linebreak}";
@@ -83,10 +83,10 @@ class Debug extends Singleton
      * @param string $title
      * @param string $titleColor
      */
-    public function prd(mixed $var, string $title = '', string $titleColor = '#c22'): void
+    public function prd(mixed $var, string $title = '', string $titleColor = '#35c'): void
     {
         $this->pr($var, $title, $titleColor);
-        $this->ks();
+        $this->kill();
     }
 
     /**
@@ -100,11 +100,11 @@ class Debug extends Singleton
     /**
      * Exits and provides additional information on exactly where the script was killed
      */
-    public function ks(): void
+    public function kill(): void
     {
         if ($this->isActive()) {
             $backtrace = $this->getBacktrace();
-            exit("<strong style='font-family:monospace;color:#c03;'>Terminated at {$backtrace['file']}:{$backtrace['line']}</strong>");
+            exit("<strong style='font-family:monospace;color:#d03;'>Terminated at {$backtrace['file']}:{$backtrace['line']}</strong>");
         }
 
         exit('Exited');
@@ -125,13 +125,13 @@ class Debug extends Singleton
      * @param string $title
      * @param string $titleColor
      */
-    public function vd(mixed $var, string $title = '', string $titleColor = '#c22'): void
+    public function vd(mixed $var, string $title = '', string $titleColor = '#35c'): void
     {
         if ($this->isActive()) {
             echo $this->wrapper[0];
 
             if ($title !== '') {
-                echo "<h3 style='color:{$titleColor}'>{$title}</h3>";
+                echo "<h2 style='color:{$titleColor}'>{$title}</h2>";
             }
 
             var_dump($var);
@@ -146,10 +146,10 @@ class Debug extends Singleton
      * @param string $title
      * @param string $titleColor
      */
-    public function vdd($var, $title = '', $titleColor = '#c22'): void
+    public function vdd($var, $title = '', $titleColor = '#35c'): void
     {
         $this->vd($var, $title, $titleColor);
-        $this->ks();
+        $this->kill();
     }
 
     /**

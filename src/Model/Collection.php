@@ -98,7 +98,7 @@ abstract class Collection implements CollectionInterface
             $this->add($modelData);
         }
 
-        $modelsAdded = $previousCount - $this->count();
+        $modelsAdded = $this->count() - $previousCount;
 
         return $modelsAdded;
     }

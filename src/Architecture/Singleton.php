@@ -39,7 +39,7 @@ abstract class Singleton implements SingletonInterface
 
         return self::$instances[$class];
     }
-    public function initialize(...$parameters): void
+    public function initialize(array $parameters): void
     {
     }
 
